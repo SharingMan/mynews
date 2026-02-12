@@ -100,45 +100,54 @@ export async function fetchRSSFeed(url: string): Promise<RawArticle[]> {
     const feed = await rssParser.parseURL(url)
     const articles: RawArticle[] = []
 
-    for (const item of feed.items.slice(0, 35)) { // 只取最新的35条
-      if (!item.title || !item.link) continue
+    // 限制每条Feed只处理前20条，避免处理太久
+    const items = feed.items?.slice(0, 20) || []
 
-      const title = stripHtml(item.title)
-      const content = item['content:encoded'] || item.content || item.summary || ''
-      const summary = extractSummary(content, 300)
-      const originalUrl = item.link
-      const imageUrl = extractImageUrl(item)
+    for (const item of items) {
+      try {
+        if (!item.title || !item.link) continue
 
-      // 解析发布时间
-      let publishedAt = new Date()
-      if (item.pubDate || item.isoDate) {
-        const date = new Date(item.pubDate || item.isoDate!)
-        if (!isNaN(date.getTime())) {
-          publishedAt = date
+        const title = stripHtml(item.title)
+        const content = item['content:encoded'] || item.content || item.summary || ''
+        const summary = extractSummary(content, 300)
+        const originalUrl = item.link
+        const imageUrl = extractImageUrl(item)
+
+        // 解析发布时间
+        let publishedAt = new Date()
+        if (item.pubDate || item.isoDate) {
+          const date = new Date(item.pubDate || item.isoDate!)
+          if (!isNaN(date.getTime())) {
+            publishedAt = date
+          }
         }
+
+        // 只保留24小时内的新闻
+        const twoDaysAgo = new Date(Date.now() - 48 * 60 * 60 * 1000)
+        if (publishedAt < twoDaysAgo) continue
+
+        const hash = generateHash(title, originalUrl)
+
+        articles.push({
+          title,
+          summary,
+          content: stripHtml(content),
+          originalUrl,
+          imageUrl,
+          publishedAt,
+          hash,
+        })
+      } catch (itemError) {
+        console.warn(`Error processing RSS item from ${url}:`, itemError)
+        continue
       }
-
-      // 只保留24小时内的新闻
-      const twoDaysAgo = new Date(Date.now() - 48 * 60 * 60 * 1000)
-      if (publishedAt < twoDaysAgo) continue
-
-      const hash = generateHash(title, originalUrl)
-
-      articles.push({
-        title,
-        summary,
-        content: stripHtml(content),
-        originalUrl,
-        imageUrl,
-        publishedAt,
-        hash,
-      })
     }
 
     return articles
-  } catch (error) {
-    console.error(`Error fetching RSS feed ${url}:`, error)
-    throw error
+  } catch (error: any) {
+    console.error(`❌ Error fetching RSS feed ${url}:`, error.message || error)
+    // 返回空数组，避免单个源失败导致整体任务失败
+    return []
   }
 }
 
