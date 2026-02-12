@@ -77,7 +77,7 @@ export default function TimelinePage() {
 
   const loadArticles = useCallback(async () => {
     try {
-      const response = await fetch('/api/articles?limit=100')
+      const response = await fetch('/api/articles?limit=300')
       if (response.ok) {
         const data = await response.json()
         setArticles(data.articles)
@@ -93,27 +93,48 @@ export default function TimelinePage() {
     loadArticles()
   }, [loadArticles])
 
-  // 按小时分组
+  // 按时间倒序分组
   const grouped = articles.reduce<TimelineGroup[]>((acc, article) => {
     const date = new Date(article.publishedAt)
-    const hour = date.getHours()
-    const hourKey = `${hour.toString().padStart(2, '0')}:00`
-    
-    const existingGroup = acc.find(g => g.hour === hourKey)
-    if (existingGroup) {
-      existingGroup.articles.push(article)
+    // 获取每个小时的时间戳用于排序和唯一标识
+    date.setMinutes(0, 0, 0)
+    const timestamp = date.getTime()
+
+    // 格式化显示时间
+    const now = new Date()
+    const isToday = date.getDate() === now.getDate() &&
+      date.getMonth() === now.getMonth() &&
+      date.getFullYear() === now.getFullYear()
+
+    const hourStr = date.getHours().toString().padStart(2, '0') + ':00'
+    const displayTime = isToday ? hourStr : `昨天 ${hourStr}` // 简单处理跨天，更严谨可以用日期
+
+    // 扩展 TimelineGroup 接口以包含 timestamp (虽然 interface 没定义，但在 JS reduce 中暂时存着用于排序，或者我们改 interface)
+    // 更好的方式是直接用 hour 字段存显示文本，或者加个 sortKey
+
+    let group = acc.find(g => g.hour === displayTime) // 这里我们用 displayTime 作为 key 简单合并
+    // Wait, 如果是前天呢？最好还是用 timestamp 或者 full date string 作为 key。
+    // 让我们用 full key
+    const groupKey = date.toISOString()
+
+    group = acc.find(g => (g as any)._ts === timestamp)
+
+    if (group) {
+      group.articles.push(article)
     } else {
       acc.push({
-        hour: hourKey,
-        label: getHourLabel(hour),
-        articles: [article]
+        hour: displayTime,
+        label: getHourLabel(date.getHours()),
+        articles: [article],
+        // @ts-ignore
+        _ts: timestamp
       })
     }
     return acc
   }, [])
 
   // 按时间倒序排序
-  grouped.sort((a, b) => b.hour.localeCompare(a.hour))
+  grouped.sort((a, b) => (b as any)._ts - (a as any)._ts)
 
   const getDomain = (url: string) => {
     try {
@@ -142,9 +163,9 @@ export default function TimelinePage() {
             <tr>
               <td>
                 <HNHeader />
-                
+
                 <div style={{ height: '10px' }} />
-                
+
                 <table className="w-full" cellPadding={0} cellSpacing={0}>
                   <tbody>
                     {isLoading ? (
@@ -169,7 +190,7 @@ export default function TimelinePage() {
                                     </td>
                                     <td className="align-top pl-1">
                                       <div className="leading-tight">
-                                        <Link 
+                                        <Link
                                           href={`/article/${article.id}`}
                                           className="text-black hover:underline"
                                           style={{ fontFamily: 'Verdana, Geneva, sans-serif', fontSize: '10pt' }}
@@ -191,7 +212,7 @@ export default function TimelinePage() {
                     )}
                   </tbody>
                 </table>
-                
+
                 <div className="py-4 text-center" style={{ borderTop: '2px solid #ff6600' }}>
                   <Link href="/" className="hover:underline text-xs" style={{ color: '#828282' }}>
                     返回首页

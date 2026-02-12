@@ -15,7 +15,7 @@ export async function GET(request: NextRequest) {
   const daily = searchParams.get('daily')
 
   // 限制最大返回数量
-  const safeLimit = Math.min(limit, 50)
+  const safeLimit = Math.min(limit, 300)
   const skip = (page - 1) * safeLimit
 
   // 生成缓存键
