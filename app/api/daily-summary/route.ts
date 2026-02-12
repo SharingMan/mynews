@@ -38,26 +38,25 @@ async function generateSummaryWithAI(articles: any[]): Promise<{ summary: string
         return `${idx + 1}. [${catName}] ${article.translatedTitle || article.title} (来源: ${article.sourceName})`
     }).join('\n')
 
-    const prompt = `你是一位专业的新闻编辑。请根据以下今日新闻列表，生成一份简洁的每日新闻总结。
+    const prompt = `你是一位资深的全球新闻主编和分析师，拥有敏锐的洞察力。请分析以下今日全球新闻列表，撰写一份深度日报。
 
-今日新闻列表：
+今日新闻列表（来源真实，请据此分析）：
 ${newsDigest}
 
-请按以下格式输出（严格按照格式）：
+请严格按以下结构输出（不要包含Markdown标题以外的废话）：
 
-【总结】
-用2-3句话概括今日全球新闻的整体情况和主要趋势。
+【深度综述】
+请写一段约150-200字的深度综述。不要只是罗列新闻，而是要分析今日全球发生的核心事件背后的关联、共同趋势或潜在的国际/行业影响。语言风格要专业、客观且具有解释力。
 
-【亮点】
-- 列出3-5个最重要的新闻亮点
-- 每个亮点一行，以"- "开头
-- 包含分类标签和简短描述
+【核心要闻】
+请挑选5-8个最具影响力的新闻事件，进行详细解读。每个要闻的格式如下：
+- [领域] **标题/核心事件**：详细描述事件内容，并补充一到两句关于其背景或潜在影响的分析。（每条约50-80字）
 
 要求：
-1. 语言简洁专业
-2. 突出重要趋势和热点
-3. 分类要涵盖科技、财经、政治、体育等主要领域
-4. 不要编造新闻，只总结列表中的内容`
+1. 摒弃流水账式的报道，注重内容的深度和逻辑性。
+2. "核心要闻"需要覆盖科技、财经、政治、国际等关键领域，避免单一类别。
+3. 必须基于提供的列表进行总结，严禁编造不存在的新闻。
+4. 保持中文语境的通顺与专业感。`
 
     // 验证 API Key 是否存在
     if (!DEEPSEEK_API_KEY) {
@@ -77,7 +76,7 @@ ${newsDigest}
                 messages: [
                     {
                         role: 'system',
-                        content: '你是一位专业的新闻编辑，擅长总结和提炼新闻要点。'
+                        content: '你是一位资深的全球新闻分析师，擅长深度解读新闻背后的趋势和影响。'
                     },
                     {
                         role: 'user',
@@ -85,7 +84,7 @@ ${newsDigest}
                     }
                 ],
                 temperature: 0.7,
-                max_tokens: 800,
+                max_tokens: 2000,
             }),
         })
 
@@ -97,16 +96,16 @@ ${newsDigest}
         const content = data.choices[0]?.message?.content || ''
 
         // 解析返回的内容
-        const summaryMatch = content.match(/【总结】\s*([\s\S]*?)(?=【亮点】|$)/)
-        const highlightsMatch = content.match(/【亮点】\s*([\s\S]*)/)
+        const summaryMatch = content.match(/【深度综述】\s*([\s\S]*?)(?=【核心要闻】|$)/)
+        const highlightsMatch = content.match(/【核心要闻】\s*([\s\S]*)/)
 
-        const summary = summaryMatch ? summaryMatch[1].trim() : '今日新闻涵盖多个领域，内容丰富多样。'
+        const summary = summaryMatch ? summaryMatch[1].trim() : '今日新闻涵盖多个领域，内容深度丰富。'
         const highlightsText = highlightsMatch ? highlightsMatch[1].trim() : ''
         const highlights = highlightsText
             .split('\n')
             .filter((line: string) => line.trim().startsWith('-'))
             .map((line: string) => line.trim().replace(/^-\s*/, ''))
-            .slice(0, 5)
+            .slice(0, 8)
 
         return {
             summary: summary || '今日新闻涵盖科技、财经、政治、体育等多个领域。',
