@@ -464,10 +464,7 @@ export const categoryKeywords: Record<string, string[]> = {
   health: ['健康', '医疗', '疾病', '疫苗', '医院', '医生', 'health', 'medical', 'disease', 'vaccine', 'covid', 'medicine', 'healthcare', 'doctor', 'hospital', 'mental health', 'nutrition', 'fitness'],
   education: ['教育', '学校', '大学', '学生', '考试', '留学', 'education', 'school', 'university', 'student', 'exam', 'college', 'academic', 'learning', 'teacher', 'professor'],
   environment: ['环境', '气候', '环保', '能源', '污染', 'climate', 'environment', 'energy', 'pollution', 'carbon', 'renewable', 'solar', 'wind', 'green', 'sustainability', 'global warming'],
-  china: ['中国', '中华', '大陆', '内地', '国内', '北京', '上海', '深圳', '广州', '杭州', '南京', '天津', '重庆', '成都', '武汉', '西安', '人民币', '央行', 'china', 'chinese', 'beijing', 'shanghai', 'shenzhen', 'guangzhou', 'mainland', 'prc'],
   overseas: ['海外', '国外', '外国', '国际', '全球', '世界', '欧洲', '美国', '日本', '韩国', '东南亚', '中东', '非洲', '拉美', 'overseas', 'international', 'global', 'world', 'foreign', 'europe', 'america', 'usa', 'japan', 'korea', 'southeast asia', 'middle east', 'africa', 'latin america'],
-  twitter: ['twitter', 'tweet', 'x.com', 'elon musk', 'trump', 'realdonaldtrump'],
-  indepth: ['深度', '长文', '报告', 'review', 'analysis', 'report', 'investigation', 'feature story'],
 }
 
 // 已移除的新闻源（存档）

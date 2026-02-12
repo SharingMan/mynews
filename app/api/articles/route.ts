@@ -37,6 +37,13 @@ export async function GET(request: NextRequest) {
 
     if (category && category !== 'all') {
       where.category = category
+
+      // 特定分类的严格源过滤（隐藏误分类的文章）
+      if (category === 'twitter') {
+        where.sourceId = { in: ['elon-musk', 'donald-trump'] }
+      } else if (category === 'indepth') {
+        where.sourceId = { in: ['sspai', 'ifanr', 'huxiu', 'latepost', 'ruanyifeng', '36kr'] }
+      }
     }
 
     if (search) {
@@ -101,7 +108,7 @@ export async function GET(request: NextRequest) {
         originalUrl: article.originalUrl,
         category: article.category,
         sourceName: article.sourceName,
-        sourceLanguage: article.source.language,
+        sourceLanguage: article.source?.language || 'en', // default to en if source missing
         publishedAt: article.publishedAt,
         viewCount: article.viewCount,
         isTranslated: !!article.translatedTitle,
