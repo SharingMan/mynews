@@ -99,16 +99,16 @@ export async function fetchRSSFeed(url: string): Promise<RawArticle[]> {
   try {
     const feed = await rssParser.parseURL(url)
     const articles: RawArticle[] = []
-    
-    for (const item of feed.items.slice(0, 35)) { // 只取最新的20条
+
+    for (const item of feed.items.slice(0, 35)) { // 只取最新的35条
       if (!item.title || !item.link) continue
-      
+
       const title = stripHtml(item.title)
       const content = item['content:encoded'] || item.content || item.summary || ''
       const summary = extractSummary(content, 300)
       const originalUrl = item.link
       const imageUrl = extractImageUrl(item)
-      
+
       // 解析发布时间
       let publishedAt = new Date()
       if (item.pubDate || item.isoDate) {
@@ -117,13 +117,13 @@ export async function fetchRSSFeed(url: string): Promise<RawArticle[]> {
           publishedAt = date
         }
       }
-      
+
       // 只保留24小时内的新闻
       const twoDaysAgo = new Date(Date.now() - 48 * 60 * 60 * 1000)
       if (publishedAt < twoDaysAgo) continue
-      
+
       const hash = generateHash(title, originalUrl)
-      
+
       articles.push({
         title,
         summary,
@@ -134,7 +134,7 @@ export async function fetchRSSFeed(url: string): Promise<RawArticle[]> {
         hash,
       })
     }
-    
+
     return articles
   } catch (error) {
     console.error(`Error fetching RSS feed ${url}:`, error)
@@ -152,37 +152,37 @@ export async function fetchBaiduHotSearch(): Promise<RawArticle[]> {
         'Accept-Language': 'zh-CN,zh;q=0.9,en;q=0.8',
         'Referer': 'https://www.baidu.com/',
       },
-      timeout: 15000,
+      signal: AbortSignal.timeout(15000),
     })
-    
+
     if (!response.ok) {
       throw new Error(`HTTP ${response.status}`)
     }
-    
+
     const html = await response.text()
-    
+
     // 检查是否被反爬
     if (html.includes('验证码') || html.includes('安全验证') || html.length < 1000) {
       throw new Error('Baidu returned anti-scraping page')
     }
-    
+
     const $ = cheerio.load(html)
     const articles: RawArticle[] = []
-    
+
     // 尝试多种选择器解析百度热搜
     const selectors = [
       '.category-wrap_iQLoo',
-      '.item-wrap_2o6Z8', 
+      '.item-wrap_2o6Z8',
       '[data-click*="log_title"]',
       '.title_3q6S5',
       'a[href*="/s?wd="]',
     ]
-    
+
     for (const selector of selectors) {
       $(selector).each((index, element) => {
         try {
           const $item = $(element)
-          
+
           // 尝试多种方式获取标题
           let title = ''
           const titleSelectors = ['.c-single-text-ellipsis', '.title_3q6S5', '.content-title', 'a']
@@ -193,7 +193,7 @@ export async function fetchBaiduHotSearch(): Promise<RawArticle[]> {
           if (!title) {
             title = $item.text().trim()
           }
-          
+
           // 尝试获取链接
           let originalUrl = $item.attr('href') || $item.find('a').attr('href') || ''
           if (originalUrl && !originalUrl.startsWith('http')) {
@@ -203,18 +203,18 @@ export async function fetchBaiduHotSearch(): Promise<RawArticle[]> {
             // 如果没有链接，使用百度搜索链接
             originalUrl = `https://www.baidu.com/s?wd=${encodeURIComponent(title)}`
           }
-          
+
           // 获取热度
           const hotScore = $item.find('.hot-index_1Bl1a, .score_1iQ-l, .heat-score').text().trim() || '0'
-          
+
           // 生成摘要
-          const summary = hotScore !== '0' 
+          const summary = hotScore !== '0'
             ? `百度搜索热度: ${hotScore}万`
             : '百度热搜话题'
-          
+
           if (title && title.length > 3 && title.length < 100) {
             const hash = generateHash(title, originalUrl || title)
-            
+
             // 检查是否已存在
             if (!articles.find(a => a.hash === hash)) {
               articles.push({
@@ -231,14 +231,14 @@ export async function fetchBaiduHotSearch(): Promise<RawArticle[]> {
           // 忽略单个条目错误
         }
       })
-      
+
       // 如果找到足够数据，停止尝试其他选择器
       if (articles.length >= 10) break
     }
-    
+
     // 限制数量
     const uniqueArticles = articles.slice(0, 30)
-    
+
     console.log(`Fetched ${uniqueArticles.length} articles from Baidu Hot Search`)
     return uniqueArticles
   } catch (error) {

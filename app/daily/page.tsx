@@ -234,7 +234,7 @@ export default function DailyPage() {
                 <p className="text-gray-500 text-sm">分类覆盖</p>
               </div>
               <div>
-                <p className="text-3xl font-bold text-gray-800">22</p>
+                <p className="text-3xl font-bold text-gray-800">37</p>
                 <p className="text-gray-500 text-sm">新闻来源</p>
               </div>
             </div>

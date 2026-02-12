@@ -10,9 +10,7 @@ function validateCronRequest(request: NextRequest): boolean {
   const secretParam = url.searchParams.get('secret')
   const cronSecret = process.env.CRON_SECRET
 
-  console.log('Debug - secretParam:', secretParam)
-  console.log('Debug - cronSecret exists:', !!cronSecret)
-  console.log('Debug - NODE_ENV:', process.env.NODE_ENV)
+
 
   // 开发环境允许访问
   if (process.env.NODE_ENV === 'development') {
@@ -28,16 +26,14 @@ function validateCronRequest(request: NextRequest): boolean {
   const isValidHeader = authHeader === `Bearer ${cronSecret}`
   const isValidParam = secretParam === cronSecret
 
-  console.log('Debug - isValidParam:', isValidParam)
-
   return isValidHeader || isValidParam
 }
 
 export async function GET(request: NextRequest) {
-  // 验证请求（暂时跳过验证以便调试）
-  // if (!validateCronRequest(request)) {
-  //   return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-  // }
+  // 验证请求
+  if (!validateCronRequest(request)) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+  }
 
   const results = {
     total: 0,
@@ -80,13 +76,13 @@ export async function GET(request: NextRequest) {
 
         // 抓取新闻 - 根据类型选择抓取方法
         let articles: any[] = []
-        
+
         if (source.type === 'scrape' && source.id === 'baidu-hot') {
           articles = await fetchBaiduHotSearch()
         } else {
           articles = await fetchRSSFeed(source.url)
         }
-        
+
         results.total += articles.length
 
         // 保存到数据库
