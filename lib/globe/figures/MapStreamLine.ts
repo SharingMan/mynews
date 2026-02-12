@@ -6,8 +6,7 @@ import {
   ShaderMaterial,
   Vector3,
 } from "three";
-import vertexShader from "@/shaders/map_line_vertexShader.glsl";
-import fragmentShader from "@/shaders/map_line_fragmentShader.glsl";
+import { mapLineVertexShader as vertexShader, mapLineFragmentShader as fragmentShader } from "@/lib/globe/shaders";
 import { MapStreamStyle, StoreConfig } from "@/lib/globe/interface";
 import Store from "@/lib/globe/store/store";
 import { Position } from "geojson";
@@ -18,7 +17,7 @@ export default class MapStreamLine {
   private readonly _config: StoreConfig;
   private readonly _store: Store;
   private _currentStyle: MapStreamStyle;
-  singleUniforms: {
+  singleUniforms!: {
     u_time: { value: number };
     number: { type: string; value: number };
     speed: { type: string; value: number };

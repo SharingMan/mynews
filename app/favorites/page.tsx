@@ -112,7 +112,7 @@ export default function FavoritesPage() {
                           </td>
                           <td className="title align-top pl-1">
                             <a
-                              href={article.url}
+                              href={article.originalUrl}
                               target="_blank"
                               rel="noopener noreferrer"
                               className="titlelink text-black visited:text-gray-600 hover:underline"
@@ -121,13 +121,13 @@ export default function FavoritesPage() {
                               {article.title}
                             </a>
                             <span className="sitebit comhead text-xs ml-1" style={{ color: '#828282' }}>
-                              (<span className="sitestr">{getDomain(article.url)}</span>)
+                              (<span className="sitestr">{getDomain(article.originalUrl)}</span>)
                             </span>
                             <div className="subtext text-xs mt-0.5 pb-1" style={{ color: '#828282' }}>
                               <span className="score"> {Math.floor(Math.random() * 100) + 1} points </span>
                               by <a href="#" className="hnuser">globalnews</a>{' '}
                               <span className="age">
-                                {new Date(article.publishedAt).toLocaleDateString()}
+                                {new Date(article.addedAt).toLocaleDateString()}
                               </span>{' '}
                               |{' '}
                               <button

@@ -1,5 +1,7 @@
-import pointImg from "@/assets/image/point.png";
-import scatterImg from "@/assets/image/scatter.png";
+// Image paths
+const pointImg = '/images/globe/point.png';
+const scatterImg = '/images/globe/scatter.png';
+
 import { lon2xyz } from "../utils/math";
 import { Coordinates, ScatterStyle, StoreConfig } from "@/lib/globe/interface";
 import { setTween } from "@/lib/globe/utils/tween";
