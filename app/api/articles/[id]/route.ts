@@ -7,9 +7,10 @@ import { prisma } from '@/lib/prisma'
  */
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  // Next.js 15+: params is a Promise
+  { params }: { params: Promise<{ id: string }> }
 ) {
-  const { id } = params
+  const { id } = await params
 
   try {
     const article = await prisma.article.findUnique({
