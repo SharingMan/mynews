@@ -1,13 +1,13 @@
-import { 
-  Cpu, 
-  TrendingUp, 
-  Landmark, 
-  Trophy, 
-  Film, 
-  HeartPulse, 
-  GraduationCap, 
-  Leaf, 
-  Globe, 
+import {
+  Cpu,
+  TrendingUp,
+  Landmark,
+  Trophy,
+  Film,
+  HeartPulse,
+  GraduationCap,
+  Leaf,
+  Globe,
   Home,
   Newspaper,
   Brain,
@@ -190,7 +190,7 @@ export const newsSources: NewsSourceConfig[] = [
     category: 'entertainment',
     language: 'en',
   },
-  
+
   // 中文科技媒体源
   {
     id: 'sspai',
@@ -304,8 +304,48 @@ export const newsSources: NewsSourceConfig[] = [
     category: 'finance',
     language: 'zh',
   },
-  
+
   // 热门中文资讯源 (tophub.today 风格)
+  {
+    id: 'jin10',
+    name: '金十数据',
+    url: 'https://rsshub.app/jin10/xnews/53',
+    type: 'rss',
+    category: 'finance',
+    language: 'zh',
+  },
+  {
+    id: 'latepost',
+    name: '晚点 LatePost',
+    url: 'https://rsshub.app/latepost',
+    type: 'rss',
+    category: 'tech',
+    language: 'zh',
+  },
+  {
+    id: 'bianews',
+    name: 'Bianews',
+    url: 'https://rsshub.app/bianews',
+    type: 'rss',
+    category: 'tech',
+    language: 'zh',
+  },
+  {
+    id: 'nbd',
+    name: '每日经济新闻',
+    url: 'https://rsshub.app/nbd',
+    type: 'rss',
+    category: 'finance',
+    language: 'zh',
+  },
+  {
+    id: 'sycaijing',
+    name: '深言财经',
+    url: 'http://www.sycaijing.com/feed', // 尝试标准RSS路径
+    type: 'rss',
+    category: 'finance',
+    language: 'zh',
+  },
   {
     id: 'weibo-hot',
     name: '微博热搜',
@@ -338,7 +378,7 @@ export const newsSources: NewsSourceConfig[] = [
     category: 'china',
     language: 'zh',
   },
-  
+
   // AI 专业媒体源
   {
     id: '机器之心',
