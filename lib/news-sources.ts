@@ -445,6 +445,30 @@ export const newsSources: NewsSourceConfig[] = [
     language: 'zh', // Contains Chinese content as requested
   },
   {
+    id: 'legaldaily',
+    name: '法治网-要闻',
+    url: 'https://diygodrsshubchromium-bundled-production-997a.up.railway.app/legaldaily/fzyw',
+    type: 'rss',
+    category: 'law',
+    language: 'zh',
+  },
+  {
+    id: 'chinacourt',
+    name: '中国法院网-要闻',
+    url: 'https://diygodrsshubchromium-bundled-production-997a.up.railway.app/court/news/yaowen',
+    type: 'rss',
+    category: 'law',
+    language: 'zh',
+  },
+  {
+    id: 'thepaper-law',
+    name: '澎湃新闻-问法',
+    url: 'https://diygodrsshubchromium-bundled-production-997a.up.railway.app/thepaper/channel/25951',
+    type: 'rss',
+    category: 'law',
+    language: 'zh',
+  },
+  {
     id: 'law-com',
     name: 'Law.com',
     url: 'https://feeds.feedblitz.com/law/legal-news&x=1',
