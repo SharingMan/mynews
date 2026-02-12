@@ -302,6 +302,7 @@ export interface SetData {
   };
   bar: BarData[];
   textMark: TextMarkItem[];
+  scatter: Coordinates[];
 }
 export type OptDataFunc = (
   type: keyof SetData,
