@@ -1,12 +1,26 @@
-import { Sprite, SpriteMaterial, TextureLoader } from "three";
+import { Sprite, SpriteMaterial, TextureLoader, CanvasTexture } from "three";
 import { StoreConfig } from "@/lib/globe/interface";
-// Image path
-const img = '/images/globe/sprite.png';
+
+function createSpriteTexture() {
+  if (typeof document === 'undefined') return undefined;
+  const canvas = document.createElement('canvas');
+  canvas.width = 64;
+  canvas.height = 64;
+  const ctx = canvas.getContext('2d');
+  if (ctx) {
+    const grad = ctx.createRadialGradient(32, 32, 0, 32, 32, 32);
+    grad.addColorStop(0, 'rgba(121, 126, 255, 1)'); // Use similar color to default
+    grad.addColorStop(1, 'rgba(121, 126, 255, 0)');
+    ctx.fillStyle = grad;
+    ctx.fillRect(0, 0, 64, 64);
+  }
+  return new CanvasTexture(canvas);
+}
 
 export default (config: StoreConfig) => {
   // TextureLoader创建一个纹理加载器对象，可以加载图片作为纹理贴图
   const textureLoader = new TextureLoader();
-  const texture = textureLoader.load(img); //加载纹理贴图
+  const texture = createSpriteTexture();
   // 创建精灵材质对象SpriteMaterial
   const spriteMaterial = new SpriteMaterial({
     color: config.spriteStyle.color,

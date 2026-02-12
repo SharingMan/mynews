@@ -227,7 +227,7 @@ export interface configType {
   flyLineRFactor?: number;
   map: string;
   texture?: {
-    path: string;
+    path?: string;
     mixed: boolean;
   };
   pixelRatio?: number;

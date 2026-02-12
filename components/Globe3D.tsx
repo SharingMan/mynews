@@ -45,7 +45,7 @@ export default function Globe3D({ markers = [], onMarkerClick }: Globe3DProps) {
                 R: 140,
                 enableZoom: true,
                 texture: {
-                    path: '/images/globe/earth.png',
+                    // path: '/images/globe/earth.png', 
                     mixed: false,
                 },
                 earth: {
@@ -111,8 +111,6 @@ export default function Globe3D({ markers = [], onMarkerClick }: Globe3DProps) {
         if (markers.length === 0) return
 
         const scatterData = markers.map(m => ({
-            lon: m.lon,
-            lat: m.lat,
             text: m.name,
             style: {
                 size: Math.max(3, Math.min(m.newsCount * 2, 12)), // 最小3，最大12

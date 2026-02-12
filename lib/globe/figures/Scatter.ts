@@ -1,7 +1,3 @@
-// Image paths
-const pointImg = '/images/globe/point.png';
-const scatterImg = '/images/globe/scatter.png';
-
 import { lon2xyz } from "../utils/math";
 import { Coordinates, ScatterStyle, StoreConfig } from "@/lib/globe/interface";
 import { setTween } from "@/lib/globe/utils/tween";
@@ -12,13 +8,52 @@ import {
   PlaneGeometry,
   TextureLoader,
   Vector3,
+  CanvasTexture,
 } from "three";
 import Store from "@/lib/globe/store/store";
 import { cloneDeep } from "lodash-es";
 
+// Generate textures programmatically to avoid missing assets
+function createPointTexture() {
+  if (typeof document === 'undefined') return undefined;
+  const canvas = document.createElement('canvas');
+  canvas.width = 32;
+  canvas.height = 32;
+  const ctx = canvas.getContext('2d');
+  if (ctx) {
+    const grad = ctx.createRadialGradient(16, 16, 0, 16, 16, 16);
+    grad.addColorStop(0, 'white');
+    grad.addColorStop(1, 'rgba(255,255,255,0)');
+    ctx.fillStyle = grad;
+    ctx.fillRect(0, 0, 32, 32);
+  }
+  return new CanvasTexture(canvas);
+}
+
+function createScatterTexture() {
+  if (typeof document === 'undefined') return undefined;
+  const canvas = document.createElement('canvas');
+  canvas.width = 64;
+  canvas.height = 64;
+  const ctx = canvas.getContext('2d');
+  if (ctx) {
+    ctx.beginPath();
+    ctx.arc(32, 32, 25, 0, Math.PI * 2);
+    ctx.strokeStyle = 'white';
+    ctx.lineWidth = 4;
+    ctx.stroke();
+    // Add a glow
+    ctx.shadowBlur = 10;
+    ctx.shadowColor = 'white';
+    ctx.stroke();
+  }
+  return new CanvasTexture(canvas);
+}
+
 const textureLoader = new TextureLoader();
-const POINT_TEXTURE = textureLoader.load(pointImg);
-const SCATTER_TEXTURE = textureLoader.load(scatterImg);
+// Lazy load or immediate if client
+const POINT_TEXTURE = createPointTexture();
+const SCATTER_TEXTURE = createScatterTexture();
 
 export default class Scatter {
   private readonly _config: StoreConfig;
