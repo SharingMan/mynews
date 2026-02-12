@@ -42,7 +42,7 @@ export async function GET(request: NextRequest) {
       if (category === 'twitter') {
         where.sourceId = { in: ['elon-musk', 'donald-trump'] }
       } else if (category === 'indepth') {
-        where.sourceId = { in: ['sspai', 'ifanr', 'huxiu', 'latepost', 'ruanyifeng', '36kr'] }
+        where.sourceId = { in: ['sspai', 'ifanr', 'huxiu', 'latepost', 'ruanyifeng'] }
       }
     }
 
