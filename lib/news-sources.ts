@@ -12,6 +12,7 @@ import {
   Newspaper,
   Brain,
   Twitter,
+  BookOpen,
   type LucideIcon
 } from 'lucide-react'
 
@@ -38,6 +39,7 @@ export const categoryIcons: Record<string, LucideIcon> = {
   china: Home,
   overseas: Globe,
   twitter: Twitter,
+  indepth: BookOpen,
 }
 
 // 新闻源配置
@@ -193,13 +195,13 @@ export const newsSources: NewsSourceConfig[] = [
     language: 'en',
   },
 
-  // 中文科技媒体源
+  // 中文科技媒体源 & 深度长文
   {
     id: 'sspai',
     name: '少数派',
     url: 'https://sspai.com/feed',
     type: 'rss',
-    category: 'tech',
+    category: 'indepth',
     language: 'zh',
   },
   {
@@ -207,7 +209,7 @@ export const newsSources: NewsSourceConfig[] = [
     name: '爱范儿',
     url: 'https://www.ifanr.com/feed',
     type: 'rss',
-    category: 'tech',
+    category: 'indepth',
     language: 'zh',
   },
   {
@@ -239,7 +241,7 @@ export const newsSources: NewsSourceConfig[] = [
     name: '阮一峰的网络日志',
     url: 'https://diygodrsshubchromium-bundled-production-997a.up.railway.app/ruanyifeng/blog',
     type: 'rss',
-    category: 'tech',
+    category: 'indepth',
     language: 'zh',
   },
   {
@@ -303,7 +305,7 @@ export const newsSources: NewsSourceConfig[] = [
     name: '虎嗅',
     url: 'https://www.huxiu.com/rss/0.xml',
     type: 'rss',
-    category: 'china',
+    category: 'indepth',
     language: 'zh',
   },
   {
@@ -337,7 +339,7 @@ export const newsSources: NewsSourceConfig[] = [
     name: '晚点 LatePost',
     url: 'https://diygodrsshubchromium-bundled-production-997a.up.railway.app/latepost',
     type: 'rss',
-    category: 'tech',
+    category: 'indepth',
     language: 'zh',
   },
   {
@@ -430,7 +432,8 @@ export const newsSources: NewsSourceConfig[] = [
     type: 'rss',
     category: 'ai',
     language: 'en',
-  },
+    // Removed trailing comma here to be safe with JSON parsers if needed, though TS allows it.
+  }
 ]
 
 // 分类映射
@@ -447,6 +450,7 @@ export const categoryLabels: Record<string, { zh: string; en: string; color: str
   china: { zh: '中国', en: 'China', color: 'bg-red-600' },
   overseas: { zh: '海外', en: 'Overseas', color: 'bg-blue-600' },
   twitter: { zh: '推特名人', en: 'Twitter Celebs', color: 'bg-sky-500' },
+  indepth: { zh: '深度长文', en: 'In-depth', color: 'bg-indigo-600' },
 }
 
 // 分类关键词（用于自动分类）
@@ -463,6 +467,7 @@ export const categoryKeywords: Record<string, string[]> = {
   china: ['中国', '中华', '大陆', '内地', '国内', '北京', '上海', '深圳', '广州', '杭州', '南京', '天津', '重庆', '成都', '武汉', '西安', '人民币', '央行', 'china', 'chinese', 'beijing', 'shanghai', 'shenzhen', 'guangzhou', 'mainland', 'prc'],
   overseas: ['海外', '国外', '外国', '国际', '全球', '世界', '欧洲', '美国', '日本', '韩国', '东南亚', '中东', '非洲', '拉美', 'overseas', 'international', 'global', 'world', 'foreign', 'europe', 'america', 'usa', 'japan', 'korea', 'southeast asia', 'middle east', 'africa', 'latin america'],
   twitter: ['twitter', 'tweet', 'x.com', 'elon musk', 'trump', 'realdonaldtrump'],
+  indepth: ['深度', '长文', '报告', 'review', 'analysis', 'report', 'investigation', 'feature story'],
 }
 
 // 已移除的新闻源（存档）
