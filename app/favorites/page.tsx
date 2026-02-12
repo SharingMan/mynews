@@ -1,8 +1,10 @@
 'use client'
 
+import React from 'react'
 import Link from 'next/link'
-import { Triangle, Trash2 } from 'lucide-react'
+import { Trash2, Star, ArrowLeft, Bookmark } from 'lucide-react'
 import { useFavorites } from '@/hooks/use-favorites'
+import { Header } from '@/components/Header'
 
 const categoryNames: Record<string, string> = {
   tech: '科技',
@@ -18,170 +20,122 @@ const categoryNames: Record<string, string> = {
   china: '中国',
 }
 
-// HN Style Header
-function HNHeader() {
-  return (
-    <table className="w-full border-0 p-0" style={{ backgroundColor: '#ff6600' }} cellPadding={0} cellSpacing={0}>
-      <tbody>
-        <tr>
-          <td style={{ padding: '2px' }}>
-            <table className="w-full border-0 p-0" cellPadding={0} cellSpacing={0}>
-              <tbody>
-                <tr>
-                  <td style={{ width: '18px', paddingRight: '4px' }}>
-                    <Link href="/" className="flex items-center justify-center">
-                      <div className="w-5 h-5 border border-white flex items-center justify-center bg-white">
-                        <Triangle className="w-3 h-3 text-[#ff6600] fill-current" />
-                      </div>
-                    </Link>
-                  </td>
-                  <td className="leading-none">
-                    <span className="font-bold mr-1">
-                      <Link href="/" className="text-black hover:underline" style={{ fontFamily: 'Verdana, Geneva, sans-serif', fontSize: '10pt' }}>
-                        全球新闻
-                      </Link>
-                    </span>
-                    <span className="text-xs text-black">
-                      我的收藏
-                    </span>
-                  </td>
-                  <td className="text-right">
-                    <Link href="/timeline" className="text-black text-xs hover:underline mr-2" style={{ fontSize: '10pt' }}>
-                      时间轴
-                    </Link>
-                    <Link href="/daily" className="text-black text-xs hover:underline" style={{ fontSize: '10pt' }}>
-                      日报
-                    </Link>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  )
+function formatTime(dateStr: string) {
+  const date = new Date(dateStr)
+  const now = new Date()
+  const diffMs = now.getTime() - date.getTime()
+  const diffMins = Math.floor(diffMs / (1000 * 60))
+
+  if (diffMins < 60) return `${diffMins}分钟前`
+  const diffHrs = Math.floor(diffMs / (1000 * 60 * 60))
+  if (diffHrs < 24) return `${diffHrs}小时前`
+  return `${Math.floor(diffHrs / 24)}天前`
+}
+
+function getDomain(url: string) {
+  try {
+    return new URL(url).hostname.replace(/^www\./, '')
+  } catch {
+    return ''
+  }
 }
 
 export default function FavoritesPage() {
   const { favorites, isLoaded, removeFavorite, clearFavorites, favoritesCount } = useFavorites()
 
-  const formatTime = (dateStr: string) => {
-    const date = new Date(dateStr)
-    const now = new Date()
-    const diffMs = now.getTime() - date.getTime()
-    const diffMins = Math.floor(diffMs / (1000 * 60))
-
-    if (diffMins < 60) return `${diffMins}分钟前`
-    const diffHrs = Math.floor(diffMs / (1000 * 60 * 60))
-    if (diffHrs < 24) return `${diffHrs}小时前`
-    return `${Math.floor(diffHrs / 24)}天前`
-  }
-
-  const getDomain = (url: string) => {
-    try {
-      return new URL(url).hostname.replace(/^www\./, '')
-    } catch {
-      return ''
-    }
-  }
-
   if (!isLoaded) {
     return (
-      <div className="min-h-screen" style={{ backgroundColor: '#f6f6ef' }}>
-        <div className="p-4 text-center" style={{ color: '#828282' }}>加载中...</div>
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="animate-pulse text-gray-400 font-bold">加载收藏中...</div>
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen" style={{ backgroundColor: '#f6f6ef' }}>
-      <center>
-        <table className="w-full max-w-[85%]" style={{ backgroundColor: '#f6f6ef' }} cellPadding={0} cellSpacing={0}>
-          <tbody>
-            <tr>
-              <td>
-                <HNHeader />
+    <div className="min-h-screen bg-gray-50/50">
+      <Header />
 
-                <div style={{ height: '10px' }} />
+      <main className="max-w-4xl mx-auto px-4 py-12">
+        <div className="flex items-center justify-between mb-10">
+          <div className="flex items-center gap-4">
+            <div className="bg-[#ff6600] p-3 rounded-2xl shadow-lg shadow-orange-200">
+              <Bookmark className="text-white w-6 h-6" />
+            </div>
+            <div>
+              <h1 className="text-3xl font-black text-gray-900">我的收藏</h1>
+              <p className="text-sm text-gray-500 font-medium">共保存了 {favoritesCount} 篇精彩文章</p>
+            </div>
+          </div>
 
-                {favorites.length === 0 ? (
-                  <div className="text-center py-16" style={{ color: '#828282' }}>
-                    <div className="text-xl font-bold mb-2">暂无收藏</div>
-                    <div className="text-sm mb-4">浏览新闻时点击收藏按钮，将感兴趣的文章保存到这里</div>
-                    <Link
-                      href="/"
-                      className="text-black hover:underline"
-                      style={{ fontFamily: 'Verdana, Geneva, sans-serif', fontSize: '10pt' }}
-                    >
-                      去浏览新闻
-                    </Link>
+          {favorites.length > 0 && (
+            <button
+              onClick={clearFavorites}
+              className="flex items-center gap-2 px-4 py-2 text-sm font-bold text-red-500 hover:bg-red-50 rounded-xl transition-colors"
+            >
+              <Trash2 size={16} /> 清空全部
+            </button>
+          )}
+        </div>
+
+        {favorites.length === 0 ? (
+          <div className="bg-white rounded-3xl p-16 text-center border border-gray-100 shadow-sm">
+            <div className="bg-gray-50 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6">
+              <Star className="text-gray-200 w-10 h-10" />
+            </div>
+            <h2 className="text-xl font-bold text-gray-900 mb-2">这里空空如也</h2>
+            <p className="text-gray-400 mb-8 max-w-xs mx-auto">
+              您还没有收藏过任何文章。在首页浏览新闻时，点击星星按钮即可将其保存到这里。
+            </p>
+            <Link
+              href="/"
+              className="inline-flex items-center gap-2 px-8 py-3 bg-[#ff6600] text-white font-bold rounded-2xl hover:bg-[#ff6600ee] transition-all hover:scale-105 shadow-xl shadow-orange-100"
+            >
+              <ArrowLeft size={18} /> 去首页看看
+            </Link>
+          </div>
+        ) : (
+          <div className="grid gap-4">
+            {favorites.map((article) => (
+              <div
+                key={article.id}
+                className="group bg-white p-5 rounded-2xl border border-gray-100 shadow-sm hover:shadow-md hover:border-[#ff660020] transition-all flex items-start gap-4"
+              >
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-2 mb-2">
+                    <span className="text-[10px] font-black uppercase tracking-wider text-[#ff6600] px-1.5 py-0.5 rounded bg-orange-50">
+                      {categoryNames[article.category] || article.category}
+                    </span>
+                    <span className="text-[11px] text-gray-400 font-medium">
+                      收藏于 {formatTime(article.addedAt)}
+                    </span>
                   </div>
-                ) : (
-                  <>
-                    {/* Stats */}
-                    <div className="flex items-center justify-between mb-4 pb-2" style={{ borderBottom: '1px solid #ff6600' }}>
-                      <span style={{ color: '#828282', fontSize: '10pt' }}>
-                        共收藏 <strong>{favoritesCount}</strong> 篇文章
-                      </span>
-                      <button
-                        onClick={clearFavorites}
-                        className="text-xs hover:underline flex items-center gap-1"
-                        style={{ color: '#828282' }}
-                      >
-                        <Trash2 className="w-3 h-3" />
-                        清空收藏
-                      </button>
-                    </div>
-
-                    {/* Favorites List */}
-                    <table className="w-full" cellPadding={0} cellSpacing={0}>
-                      <tbody>
-                        {favorites.map((article, index) => (
-                          <tr key={article.id} className="group">
-                            <td className="align-top text-right pr-1 py-1" style={{ color: '#828282', fontSize: '10pt', width: '30px' }}>
-                              {index + 1}.
-                            </td>
-                            <td className="align-top pl-1 py-1">
-                              <div className="leading-tight">
-                                <a
-                                  href={article.originalUrl}
-                                  target="_blank"
-                                  rel="noopener noreferrer"
-                                  className="text-black hover:underline"
-                                  style={{ fontFamily: 'Verdana, Geneva, sans-serif', fontSize: '10pt' }}
-                                >
-                                  {article.title}
-                                </a>
-                                <span className="text-xs ml-1" style={{ color: '#828282' }}>
-                                  ({getDomain(article.originalUrl)}) {formatTime(article.addedAt)} | {categoryNames[article.category] || article.category}
-                                </span>
-                                <button
-                                  onClick={() => removeFavorite(article.id)}
-                                  className="ml-2 text-xs hover:underline opacity-0 group-hover:opacity-100 transition-opacity"
-                                  style={{ color: '#828282' }}
-                                >
-                                  [取消收藏]
-                                </button>
-                              </div>
-                            </td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </>
-                )}
-
-                <div className="py-4 text-center" style={{ borderTop: '2px solid #ff6600', marginTop: '20px' }}>
-                  <Link href="/" className="hover:underline text-xs" style={{ color: '#828282' }}>
-                    返回首页
-                  </Link>
+                  <h3 className="text-lg font-bold text-gray-900 leading-snug group-hover:text-[#ff6600] transition-colors">
+                    <a href={article.originalUrl} target="_blank" rel="noopener noreferrer">
+                      {article.title}
+                    </a>
+                  </h3>
+                  <p className="mt-1 text-xs text-gray-400 font-medium">
+                    {article.sourceName} • {getDomain(article.originalUrl)}
+                  </p>
                 </div>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </center>
+                <button
+                  onClick={() => removeFavorite(article.id)}
+                  className="p-2 text-gray-300 hover:text-red-500 hover:bg-red-50 rounded-xl transition-all"
+                  title="取消收藏"
+                >
+                  <Trash2 size={20} />
+                </button>
+              </div>
+            ))}
+          </div>
+        )}
+
+        <div className="mt-12 text-center">
+          <Link href="/" className="text-gray-400 text-sm font-bold hover:text-[#ff6600] transition-colors flex items-center justify-center gap-2">
+            <ArrowLeft size={16} /> 返回全球新闻首页
+          </Link>
+        </div>
+      </main>
     </div>
   )
 }

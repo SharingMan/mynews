@@ -1,124 +1,30 @@
 'use client'
 
-import { useState, useEffect, useCallback, Suspense } from 'react'
-import Link from 'next/link'
+import React, { useState, useEffect, useCallback, Suspense } from 'react'
 import { useSearchParams } from 'next/navigation'
-import { Triangle } from 'lucide-react'
-
-interface Article {
-  id: string
-  title: string
-  originalTitle: string
-  summary?: string
-  category: string
-  sourceName: string
-  originalUrl: string
-  imageUrl?: string
-  publishedAt: string
-  viewCount: number
-}
-
-// 分类配置
-const categories = [
-  { id: '', name: '全部', color: '#ff6600' },
-  { id: 'live', name: '实时热点', color: '#ff0000' }, // New Live News Category
-  { id: 'ai', name: 'AI', color: '#8b5cf6' },
-  { id: 'tech', name: '科技', color: '#3b82f6' },
-  { id: 'finance', name: '财经', color: '#10b981' },
-  { id: 'china', name: '中国', color: '#dc2626' },
-  { id: 'overseas', name: '国际', color: '#2563eb' },
-  { id: 'sports', name: '体育', color: '#f59e0b' },
-  { id: 'politics', name: '政治', color: '#ef4444' },
-  { id: 'entertainment', name: '娱乐', color: '#ec4899' },
-]
-
-// HN Style Header Component
-function HNHeader({ currentCategory }: { currentCategory: string }) {
-  const currentCat = categories.find(c => c.id === currentCategory)
-
-  return (
-    <table className="w-full border-0 p-0" style={{ backgroundColor: '#ff6600' }} cellPadding={0} cellSpacing={0}>
-      <tbody>
-        <tr>
-          <td style={{ padding: '2px' }}>
-            <table className="w-full border-0 p-0" cellPadding={0} cellSpacing={0}>
-              <tbody>
-                <tr>
-                  <td style={{ width: '18px', paddingRight: '4px' }}>
-                    <Link href="/" className="flex items-center justify-center">
-                      <div className="w-5 h-5 border border-white flex items-center justify-center bg-white">
-                        <Triangle className="w-3 h-3 text-[#ff6600] fill-current" />
-                      </div>
-                    </Link>
-                  </td>
-                  <td className="leading-none">
-                    <span className="font-bold mr-1">
-                      <Link href="/" className="text-black hover:underline" style={{ fontFamily: 'Verdana, Geneva, sans-serif', fontSize: '10pt' }}>
-                        全球新闻
-                      </Link>
-                    </span>
-                    <span className="text-xs text-black">
-                      {currentCat ? currentCat.name : '全部新闻'}
-                    </span>
-                  </td>
-                  <td className="text-right">
-                    <Link href="/map" className="text-black text-xs hover:underline mr-2" style={{ fontSize: '10pt' }}>
-                      地图
-                    </Link>
-                    <Link href="/timeline" className="text-black text-xs hover:underline mr-2" style={{ fontSize: '10pt' }}>
-                      时间轴
-                    </Link>
-                    <Link href="/daily" className="text-black text-xs hover:underline mr-2" style={{ fontSize: '10pt' }}>
-                      日报
-                    </Link>
-                    <Link href="/favorites" className="text-black text-xs hover:underline" style={{ fontSize: '10pt' }}>
-                      收藏
-                    </Link>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </td>
-        </tr>
-        <tr>
-          <td style={{ padding: '2px', backgroundColor: '#ff6600' }}>
-            <div className="flex items-center gap-1 px-1 overflow-x-auto whitespace-nowrap">
-              {categories.map((cat) => (
-                <Link
-                  key={cat.id}
-                  href={cat.id ? `/?category=${cat.id}` : '/'}
-                  className="text-black text-xs hover:underline px-1"
-                  style={{
-                    fontSize: '10pt',
-                    fontWeight: currentCategory === cat.id ? 'bold' : 'normal'
-                  }}
-                >
-                  {cat.name}
-                </Link>
-              ))}
-            </div>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  )
-}
+import { Header } from '@/components/Header'
+import { ArticleCard, Article } from '@/components/ArticleCard'
+import { Newspaper, Loader2, RefreshCcw, ArrowUp } from 'lucide-react'
+import Link from 'next/link'
 
 // 骨架屏组件
 function LoadingSkeleton() {
   return (
-    <div style={{ color: '#828282', padding: '20px', textAlign: 'center' }}>
-      加载中...
+    <div className="space-y-4 animate-pulse">
+      {[...Array(6)].map((_, i) => (
+        <div key={i} className="bg-white rounded-2xl h-48 sm:h-32 w-full border border-gray-100" />
+      ))}
     </div>
   )
 }
 
-// 新闻列表组件
 function NewsList() {
   const [articles, setArticles] = useState<Article[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [hasMore, setHasMore] = useState(true)
   const [page, setPage] = useState(1)
+  const [showScrollTop, setShowScrollTop] = useState(false)
+
   const searchParams = useSearchParams()
   const category = searchParams.get('category') || ''
 
@@ -128,10 +34,8 @@ function NewsList() {
     try {
       let url = ''
       if (category === 'live') {
-        // Use the new external-news API for "Live News"
         url = '/api/external-news?language=en&category=top'
       } else {
-        // Use the existing API for other categories
         const apiParams = new URLSearchParams()
         if (category) apiParams.set('category', category)
         apiParams.set('limit', '30')
@@ -150,9 +54,9 @@ function NewsList() {
           setArticles(newArticles)
         }
 
-        // External API (Live News) might doesn't support pagination the same way
+        // External API (Live News) doesn't support pagination the same way for now
         if (category === 'live') {
-          setHasMore(false); // For now, disable "load more" for live news as it's a single fetch
+          setHasMore(false)
         } else {
           setHasMore(newArticles.length === 30)
         }
@@ -171,192 +75,160 @@ function NewsList() {
 
   useEffect(() => {
     const handleScroll = () => {
-      // Disable infinite scroll for "live" category for now
-      if (category === 'live') return
+      // Show/hide scroll to top button
+      if (window.scrollY > 1000) {
+        setShowScrollTop(true)
+      } else {
+        setShowScrollTop(false)
+      }
 
+      // Infinite scroll
+      if (category === 'live') return
       if (
         window.innerHeight + document.documentElement.scrollTop
         >= document.documentElement.offsetHeight - 1000
       ) {
         if (!isLoading && hasMore) {
-          setPage(prev => prev + 1)
-          loadNews(page + 1, true)
+          setPage(prev => {
+            const nextPage = prev + 1
+            loadNews(nextPage, true)
+            return nextPage
+          })
         }
       }
     }
 
     window.addEventListener('scroll', handleScroll)
     return () => window.removeEventListener('scroll', handleScroll)
-  }, [isLoading, hasMore, page, loadNews, category])
+  }, [isLoading, hasMore, loadNews, category])
 
-  const getDomain = (url: string) => {
-    try {
-      return new URL(url).hostname.replace(/^www\./, '')
-    } catch {
-      return ''
-    }
-  }
-
-  const formatTime = (dateStr: string) => {
-    if (!dateStr) return '';
-    const date = new Date(dateStr)
-    const now = new Date()
-    const diffMs = now.getTime() - date.getTime()
-    const diffMins = Math.floor(diffMs / (1000 * 60))
-
-    if (diffMins < 60) return `${diffMins}分钟前`
-    const diffHrs = Math.floor(diffMs / (1000 * 60 * 60))
-    if (diffHrs < 24) return `${diffHrs}小时前`
-    return `${Math.floor(diffHrs / 24)}天前`
-  }
-
-  const categoryNames: Record<string, string> = {
-    live: '实时热点',
-    tech: '科技',
-    ai: 'AI',
-    finance: '财经',
-    overseas: '海外',
-    china: '中国',
-    sports: '体育',
-    politics: '政治',
-    entertainment: '娱乐',
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
   if (isLoading && articles.length === 0) {
-    return <LoadingSkeleton />
+    return (
+      <div className="max-w-4xl mx-auto px-4 py-8">
+        <LoadingSkeleton />
+      </div>
+    )
   }
 
   return (
-    <table className="w-full" cellPadding={0} cellSpacing={0}>
-      <tbody>
+    <div className="max-w-4xl mx-auto px-4 py-8 relative">
+      <div className="space-y-4">
         {articles.length === 0 ? (
-          <tr>
-            <td className="p-4 text-center" style={{ color: '#828282' }}>
-              暂无新闻
-            </td>
-          </tr>
+          <div className="flex flex-col items-center justify-center py-20 bg-white rounded-3xl border border-gray-100 shadow-sm">
+            <Newspaper size={64} className="text-gray-200 mb-4" />
+            <p className="text-gray-500 font-bold">暂无相关新闻</p>
+            <button
+              onClick={() => loadNews(1, false)}
+              className="mt-4 text-[#ff6600] font-bold hover:underline flex items-center gap-2"
+            >
+              <RefreshCcw size={16} /> 刷新重试
+            </button>
+          </div>
         ) : (
           articles.map((article, index) => (
-            <tr key={article.id} className="group">
-              <td className="align-top text-right pr-1 py-4" style={{ color: '#828282', fontSize: '10pt', width: '30px' }}>
-                {index + 1}.
-              </td>
-              <td className="align-top pl-1 py-4 border-b border-[#eee] last:border-0 group-hover:bg-[#fcfcfa] transition-colors duration-200">
-                <div className={`flex gap-5 ${category === 'live' ? 'items-start' : 'items-baseline'}`}>
-                  {/* 左侧缩略图：仅在实时热点分类且有图时展示 */}
-                  {article.imageUrl && category === 'live' && (
-                    <div className="flex-shrink-0 w-28 h-20 sm:w-36 sm:h-24 overflow-hidden rounded bg-gray-200 border border-gray-100 mt-1 shadow-sm">
-                      <img
-                        src={article.imageUrl}
-                        alt={article.title}
-                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                        onError={(e) => {
-                          (e.target as HTMLImageElement).parentElement!.style.display = 'none';
-                        }}
-                      />
-                    </div>
-                  )}
-
-                  <div className="flex-1 min-w-0">
-                    <div className="leading-tight">
-                      <Link
-                        href={category === 'live' ? article.originalUrl : `/article/${article.id}`}
-                        target={category === 'live' ? "_blank" : "_self"}
-                        className="text-black hover:underline font-medium block sm:inline"
-                        style={{ fontFamily: 'Verdana, Geneva, sans-serif', fontSize: '10.5pt', lineHeight: '1.4' }}
-                      >
-                        {article.title}
-                      </Link>
-
-                      <div className="mt-1.5 flex flex-wrap items-center gap-x-2 gap-y-1">
-                        <span className="text-[10px] uppercase tracking-wider font-bold px-1.5 py-0.5 rounded bg-orange-50" style={{ color: '#ff6600', border: '1px solid #ff660040' }}>
-                          {categoryNames[article.category] || article.category}
-                        </span>
-                        <span className="text-xs" style={{ color: '#828282' }}>
-                          ({getDomain(article.originalUrl)})
-                        </span>
-                        <span className="text-xs" style={{ color: '#828282' }}>
-                          • {formatTime(article.publishedAt)}
-                        </span>
-                      </div>
-
-                      {/* 展示详细摘要 */}
-                      {article.summary && category === 'live' && (
-                        <div className="mt-2 text-xs text-[#444] leading-relaxed line-clamp-2 sm:line-clamp-3"
-                          style={{ fontFamily: 'system-ui, -apple-system, sans-serif' }}>
-                          {article.summary}
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                </div>
-              </td>
-            </tr>
+            <ArticleCard
+              key={`${article.id}-${index}`}
+              article={article}
+              index={index}
+              showImage={category === 'live'}
+            />
           ))
         )}
+
         {isLoading && articles.length > 0 && (
-          <tr>
-            <td colSpan={2} className="p-2 text-center" style={{ color: '#828282', fontSize: '10pt' }}>
-              加载更多...
-            </td>
-          </tr>
+          <div className="flex justify-center py-8">
+            <Loader2 className="animate-spin text-[#ff6600]" size={32} />
+          </div>
         )}
-        {(!hasMore && articles.length > 0 && category !== 'live') && (
-          <tr>
-            <td colSpan={2} className="p-2 text-center" style={{ color: '#828282', fontSize: '10pt' }}>
-              已加载全部内容
-            </td>
-          </tr>
+
+        {!hasMore && articles.length > 0 && category !== 'live' && (
+          <div className="text-center py-12">
+            <div className="inline-block px-6 py-2 bg-gray-50 rounded-full text-xs font-bold text-gray-400 border border-gray-100">
+              🎉 你已经看完了全部新闻
+            </div>
+          </div>
         )}
-      </tbody>
-    </table>
+      </div>
+
+      {/* Back to Top */}
+      {showScrollTop && (
+        <button
+          onClick={scrollToTop}
+          className="fixed bottom-8 right-8 p-4 bg-white shadow-2xl rounded-2xl border border-gray-100 text-gray-900 hover:bg-gray-50 hover:text-[#ff6600] transition-all hover:-translate-y-1 z-50 animate-in fade-in slide-in-from-bottom"
+        >
+          <ArrowUp size={24} />
+        </button>
+      )}
+    </div>
   )
 }
 
-// 主内容组件 (使用 useSearchParams)
 function HomeContent() {
   const searchParams = useSearchParams()
   const category = searchParams.get('category') || ''
 
   return (
     <>
-      <HNHeader currentCategory={category} />
+      <Header currentCategory={category} />
 
-      <div style={{ height: '10px' }} />
+      {/* Optional Hero for Home */}
+      {!category && (
+        <section className="bg-gray-900 text-white overflow-hidden relative">
+          <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=2072&auto=format&fit=crop')] bg-cover bg-center opacity-10 scale-110"></div>
+          <div className="max-w-7xl mx-auto px-4 py-12 sm:py-20 relative z-10">
+            <div className="max-w-3xl">
+              <h1 className="text-4xl sm:text-6xl font-black mb-6 tracking-tight leading-tight">
+                掌握全球动态 <br />
+                <span className="text-[#ff6600]">只在一指之间</span>
+              </h1>
+              <p className="text-lg sm:text-xl text-gray-400 font-medium mb-10 leading-relaxed">
+                为您聚合世界各地的优质新闻，实时翻译，去繁就简。跨越语言障碍，洞察全球真相。
+              </p>
+              <div className="flex flex-wrap gap-4">
+                <Link href="/daily" className="px-8 py-4 bg-[#ff6600] hover:bg-[#ff6600cc] text-white font-bold rounded-2xl transition-all hover:scale-[1.02] shadow-xl shadow-orange-900/40">
+                  查看今日日报
+                </Link>
+                <Link href="/favorites" className="px-8 py-4 bg-white/10 hover:bg-white/20 text-white font-bold rounded-2xl backdrop-blur-md transition-all border border-white/10">
+                  我的收藏
+                </Link>
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
 
-      <Suspense fallback={<LoadingSkeleton />}>
-        <NewsList />
-      </Suspense>
+      <main className="bg-gray-50/50 min-h-screen">
+        <Suspense fallback={<div className="max-w-4xl mx-auto p-8"><LoadingSkeleton /></div>}>
+          <NewsList />
+        </Suspense>
+      </main>
 
-      <div className="py-4 text-center" style={{ borderTop: '2px solid #ff6600', marginTop: '20px' }}>
-        <Link href="/api/cron/fetch" className="hover:underline text-xs mr-4" style={{ color: '#828282' }}>
-          刷新数据
-        </Link>
-        <Link href="/daily" className="hover:underline text-xs" style={{ color: '#828282' }}>
-          每日日报
-        </Link>
-      </div>
+      <footer className="bg-white border-t border-gray-100 py-12 px-4 shadow-inner">
+        <div className="max-w-7xl mx-auto text-center">
+          <div className="flex justify-center gap-6 mb-8 text-sm font-bold text-gray-400">
+            <Link href="/api/cron/fetch" className="hover:text-[#ff6600] transition-colors">手动刷新</Link>
+            <Link href="/daily" className="hover:text-[#ff6600] transition-colors">每日总结</Link>
+            <Link href="/api/rss" className="hover:text-[#ff6600] transition-colors">RSS FEED</Link>
+          </div>
+          <p className="text-gray-300 text-[10px] font-bold uppercase tracking-[0.2em]">
+            © 2026 GLOBAL NEWS EXPERIMENTAL PROJECT - POWERED BY AI
+          </p>
+        </div>
+      </footer>
     </>
   )
 }
 
-// 主页面
 export default function HomePage() {
   return (
-    <div className="min-h-screen" style={{ backgroundColor: '#f6f6ef' }}>
-      <center>
-        <table className="w-full max-w-[85%]" style={{ backgroundColor: '#f6f6ef' }} cellPadding={0} cellSpacing={0}>
-          <tbody>
-            <tr>
-              <td>
-                <Suspense fallback={<LoadingSkeleton />}>
-                  <HomeContent />
-                </Suspense>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </center>
+    <div className="min-h-screen bg-white">
+      <Suspense fallback={<div className="flex h-screen items-center justify-center"><Loader2 className="animate-spin text-[#ff6600]" /></div>}>
+        <HomeContent />
+      </Suspense>
     </div>
   )
 }
