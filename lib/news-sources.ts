@@ -1,0 +1,466 @@
+import { 
+  Cpu, 
+  TrendingUp, 
+  Landmark, 
+  Trophy, 
+  Film, 
+  HeartPulse, 
+  GraduationCap, 
+  Leaf, 
+  Globe, 
+  Home,
+  Newspaper,
+  Brain,
+  type LucideIcon
+} from 'lucide-react'
+
+export interface NewsSourceConfig {
+  id: string
+  name: string
+  url: string
+  type: 'rss' | 'api' | 'scrape'
+  category: string
+  language: string
+}
+
+// 分类图标映射
+export const categoryIcons: Record<string, LucideIcon> = {
+  tech: Cpu,
+  ai: Brain,
+  finance: TrendingUp,
+  politics: Landmark,
+  sports: Trophy,
+  entertainment: Film,
+  health: HeartPulse,
+  education: GraduationCap,
+  environment: Leaf,
+  china: Home,
+  overseas: Globe,
+}
+
+// 新闻源配置
+export const newsSources: NewsSourceConfig[] = [
+  // 英文源
+  // 科技
+  {
+    id: 'techcrunch',
+    name: 'TechCrunch',
+    url: 'https://techcrunch.com/feed/',
+    type: 'rss',
+    category: 'tech',
+    language: 'en',
+  },
+  {
+    id: 'verge',
+    name: 'The Verge',
+    url: 'https://www.theverge.com/rss/index.xml',
+    type: 'rss',
+    category: 'tech',
+    language: 'en',
+  },
+  {
+    id: 'wired',
+    name: 'Wired',
+    url: 'https://www.wired.com/feed/rss',
+    type: 'rss',
+    category: 'tech',
+    language: 'en',
+  },
+  {
+    id: 'arstechnica',
+    name: 'Ars Technica',
+    url: 'http://feeds.arstechnica.com/arstechnica/index',
+    type: 'rss',
+    category: 'tech',
+    language: 'en',
+  },
+  {
+    id: 'engadget',
+    name: 'Engadget',
+    url: 'https://www.engadget.com/rss.xml',
+    type: 'rss',
+    category: 'tech',
+    language: 'en',
+  },
+  // 财经
+  {
+    id: 'bloomberg',
+    name: 'Bloomberg',
+    url: 'https://feeds.bloomberg.com/business/news.rss',
+    type: 'rss',
+    category: 'finance',
+    language: 'en',
+  },
+  {
+    id: 'cnbc',
+    name: 'CNBC',
+    url: 'https://www.cnbc.com/id/100003114/device/rss/rss.html',
+    type: 'rss',
+    category: 'finance',
+    language: 'en',
+  },
+  {
+    id: 'ft',
+    name: 'Financial Times',
+    url: 'https://www.ft.com/?format=rss',
+    type: 'rss',
+    category: 'finance',
+    language: 'en',
+  },
+  {
+    id: 'marketwatch',
+    name: 'MarketWatch',
+    url: 'https://www.marketwatch.com/rss/topstories',
+    type: 'rss',
+    category: 'finance',
+    language: 'en',
+  },
+  // 国际/政治
+  {
+    id: 'bbc-world',
+    name: 'BBC World',
+    url: 'http://feeds.bbci.co.uk/news/world/rss.xml',
+    type: 'rss',
+    category: 'overseas',
+    language: 'en',
+  },
+  {
+    id: 'bbc-politics',
+    name: 'BBC Politics',
+    url: 'http://feeds.bbci.co.uk/news/politics/rss.xml',
+    type: 'rss',
+    category: 'politics',
+    language: 'en',
+  },
+  {
+    id: 'guardian-world',
+    name: 'The Guardian World',
+    url: 'https://www.theguardian.com/world/rss',
+    type: 'rss',
+    category: 'overseas',
+    language: 'en',
+  },
+  {
+    id: 'aljazeera',
+    name: 'Al Jazeera',
+    url: 'https://www.aljazeera.com/xml/rss/all.xml',
+    type: 'rss',
+    category: 'overseas',
+    language: 'en',
+  },
+  // 体育
+  {
+    id: 'espn',
+    name: 'ESPN',
+    url: 'https://www.espn.com/espn/rss/news',
+    type: 'rss',
+    category: 'sports',
+    language: 'en',
+  },
+  {
+    id: 'bbc-sport',
+    name: 'BBC Sport',
+    url: 'http://feeds.bbci.co.uk/sport/rss.xml',
+    type: 'rss',
+    category: 'sports',
+    language: 'en',
+  },
+  {
+    id: 'skysports',
+    name: 'Sky Sports',
+    url: 'https://www.skysports.com/rss/12040',
+    type: 'rss',
+    category: 'sports',
+    language: 'en',
+  },
+  // 娱乐
+  {
+    id: 'variety',
+    name: 'Variety',
+    url: 'https://variety.com/feed/',
+    type: 'rss',
+    category: 'entertainment',
+    language: 'en',
+  },
+  {
+    id: 'hollywood-reporter',
+    name: 'Hollywood Reporter',
+    url: 'https://www.hollywoodreporter.com/feed/',
+    type: 'rss',
+    category: 'entertainment',
+    language: 'en',
+  },
+  
+  // 中文科技媒体源
+  {
+    id: 'sspai',
+    name: '少数派',
+    url: 'https://sspai.com/feed',
+    type: 'rss',
+    category: 'tech',
+    language: 'zh',
+  },
+  {
+    id: 'ifanr',
+    name: '爱范儿',
+    url: 'https://www.ifanr.com/feed',
+    type: 'rss',
+    category: 'tech',
+    language: 'zh',
+  },
+  {
+    id: '36kr',
+    name: '36氪',
+    url: 'https://36kr.com/feed',
+    type: 'rss',
+    category: 'tech',
+    language: 'zh',
+  },
+  {
+    id: 'zhihu',
+    name: '知乎日报',
+    url: 'https://www.zhihu.com/rss',
+    type: 'rss',
+    category: 'china',
+    language: 'zh',
+  },
+  {
+    id: 'zhihu-hot',
+    name: '知乎热榜',
+    url: 'https://rsshub.app/zhihu/hot',
+    type: 'rss',
+    category: 'china',
+    language: 'zh',
+  },
+  {
+    id: 'ruanyifeng',
+    name: '阮一峰的网络日志',
+    url: 'http://feeds.feedburner.com/ruanyifeng',
+    type: 'rss',
+    category: 'tech',
+    language: 'zh',
+  },
+  {
+    id: 'zaobao',
+    name: '联合早报',
+    url: 'https://plink.anyfeeder.com/zaobao/realtime/china',
+    type: 'rss',
+    category: 'china',
+    language: 'zh',
+  },
+  {
+    id: 'infzm',
+    name: '南方周末',
+    url: 'https://rsshub.app/infzm/2',
+    type: 'rss',
+    category: 'china',
+    language: 'zh',
+  },
+  {
+    id: 'solidot',
+    name: 'Solidot',
+    url: 'https://www.solidot.org/index.rss',
+    type: 'rss',
+    category: 'tech',
+    language: 'zh',
+  },
+  {
+    id: 'appinn',
+    name: '小众软件',
+    url: 'http://feed.appinn.com/',
+    type: 'rss',
+    category: 'tech',
+    language: 'zh',
+  },
+  {
+    id: 'bmpi',
+    name: '构建我的被动收入',
+    url: 'https://www.bmpi.dev/index.xml',
+    type: 'rss',
+    category: 'finance',
+    language: 'zh',
+  },
+  {
+    id: 'huxiu',
+    name: '虎嗅',
+    url: 'https://www.huxiu.com/rss/0.xml',
+    type: 'rss',
+    category: 'china',
+    language: 'zh',
+  },
+  {
+    id: 'ithome',
+    name: 'IT之家',
+    url: 'https://rsshub.app/ithome/ranking/24h',
+    type: 'rss',
+    category: 'tech',
+    language: 'zh',
+  },
+  {
+    id: 'cn-wsj',
+    name: '华尔街日报中文版',
+    url: 'https://cn.wsj.com/zh-hans/rss',
+    type: 'rss',
+    category: 'finance',
+    language: 'zh',
+  },
+  
+  // 热门中文资讯源 (tophub.today 风格)
+  {
+    id: 'weibo-hot',
+    name: '微博热搜',
+    url: 'https://rsshub.app/weibo/search/hot',
+    type: 'rss',
+    category: 'china',
+    language: 'zh',
+  },
+  {
+    id: 'bilibili-hot',
+    name: '哔哩哔哩热榜',
+    url: 'https://rsshub.app/bilibili/hot-search',
+    type: 'rss',
+    category: 'china',
+    language: 'zh',
+  },
+  {
+    id: 'douyin-hot',
+    name: '抖音热榜',
+    url: 'https://rsshub.app/douyin/hot-search',
+    type: 'rss',
+    category: 'china',
+    language: 'zh',
+  },
+  {
+    id: 'toutiao-hot',
+    name: '今日头条热榜',
+    url: 'https://rsshub.app/toutiao/trending',
+    type: 'rss',
+    category: 'china',
+    language: 'zh',
+  },
+  
+  // AI 专业媒体源
+  {
+    id: '机器之心',
+    name: '机器之心',
+    url: 'https://www.jiqizhixin.com/rss',
+    type: 'rss',
+    category: 'ai',
+    language: 'zh',
+  },
+  {
+    id: '量子位',
+    name: '量子位',
+    url: 'https://www.qbitai.com/feed',
+    type: 'rss',
+    category: 'ai',
+    language: 'zh',
+  },
+  {
+    id: 'paperweekly',
+    name: 'PaperWeekly',
+    url: 'https://www.paperweekly.me/rss',
+    type: 'rss',
+    category: 'ai',
+    language: 'zh',
+  },
+  {
+    id: 'analytics-india',
+    name: 'Analytics India AI',
+    url: 'https://analyticsindiamag.com/feed/',
+    type: 'rss',
+    category: 'ai',
+    language: 'en',
+  },
+  {
+    id: 'ai-journal',
+    name: 'AI Journal',
+    url: 'https://www.aitrends.com/feed/',
+    type: 'rss',
+    category: 'ai',
+    language: 'en',
+  },
+]
+
+// 分类映射
+export const categoryLabels: Record<string, { zh: string; en: string; color: string }> = {
+  tech: { zh: '科技', en: 'Technology', color: 'bg-blue-500' },
+  ai: { zh: 'AI', en: 'AI', color: 'bg-purple-500' },
+  finance: { zh: '财经', en: 'Finance', color: 'bg-green-500' },
+  politics: { zh: '政治', en: 'Politics', color: 'bg-red-500' },
+  sports: { zh: '体育', en: 'Sports', color: 'bg-orange-500' },
+  entertainment: { zh: '娱乐', en: 'Entertainment', color: 'bg-pink-500' },
+  health: { zh: '健康', en: 'Health', color: 'bg-teal-500' },
+  education: { zh: '教育', en: 'Education', color: 'bg-indigo-500' },
+  environment: { zh: '环境', en: 'Environment', color: 'bg-emerald-500' },
+  china: { zh: '中国', en: 'China', color: 'bg-red-600' },
+  overseas: { zh: '海外', en: 'Overseas', color: 'bg-blue-600' },
+}
+
+// 分类关键词（用于自动分类）
+export const categoryKeywords: Record<string, string[]> = {
+  tech: ['科技', '互联网', '软件', '硬件', '手机', '电脑', '芯片', '半导体', '5G', '区块链', 'crypto', 'apple', 'google', 'microsoft', 'tesla', 'startup', 'venture', 'technology', 'tech', 'software', 'cloud', 'cybersecurity'],
+  ai: ['AI', '人工智能', '机器学习', '深度学习', '神经网络', '大模型', 'LLM', 'ChatGPT', 'GPT', 'Claude', 'Gemini', 'OpenAI', 'Anthropic', '生成式AI', 'AIGC', 'AI绘画', 'Midjourney', 'Stable Diffusion', '自动驾驶', '智能机器人', '自然语言处理', 'NLP', '计算机视觉', 'artificial intelligence', 'machine learning', 'deep learning', 'neural network', 'generative AI', 'large language model'],
+  finance: ['财经', '金融', '股票', '股市', '经济', '银行', '投资', '理财', '货币', '比特币', 'market', 'stock', 'trade', 'economy', 'banking', 'investment', 'finance', 'financial', 'crypto', 'bitcoin', 'ethereum', 'nft'],
+  politics: ['政治', '政府', '选举', '政策', '法律', 'president', 'government', 'election', 'policy', 'law', 'congress', 'parliament', 'politics', 'political', 'vote', 'campaign', 'democrat', 'republican'],
+  sports: ['体育', '足球', '篮球', '比赛', '运动员', '奥运会', '世界杯', 'sports', 'football', 'soccer', 'basketball', 'olympics', 'nba', 'fifa', 'tennis', 'golf', 'baseball', 'nfl', 'premier league'],
+  entertainment: ['娱乐', '电影', '音乐', '明星', '综艺', 'movie', 'film', 'music', 'celebrity', 'hollywood', 'netflix', 'entertainment', 'tv', 'television', 'actor', 'actress', 'director', 'album', 'concert'],
+  health: ['健康', '医疗', '疾病', '疫苗', '医院', '医生', 'health', 'medical', 'disease', 'vaccine', 'covid', 'medicine', 'healthcare', 'doctor', 'hospital', 'mental health', 'nutrition', 'fitness'],
+  education: ['教育', '学校', '大学', '学生', '考试', '留学', 'education', 'school', 'university', 'student', 'exam', 'college', 'academic', 'learning', 'teacher', 'professor'],
+  environment: ['环境', '气候', '环保', '能源', '污染', 'climate', 'environment', 'energy', 'pollution', 'carbon', 'renewable', 'solar', 'wind', 'green', 'sustainability', 'global warming'],
+  china: ['中国', '中华', '大陆', '内地', '国内', '北京', '上海', '深圳', '广州', '杭州', '南京', '天津', '重庆', '成都', '武汉', '西安', '人民币', '央行', 'china', 'chinese', 'beijing', 'shanghai', 'shenzhen', 'guangzhou', 'mainland', 'prc'],
+  overseas: ['海外', '国外', '外国', '国际', '全球', '世界', '欧洲', '美国', '日本', '韩国', '东南亚', '中东', '非洲', '拉美', 'overseas', 'international', 'global', 'world', 'foreign', 'europe', 'america', 'usa', 'japan', 'korea', 'southeast asia', 'middle east', 'africa', 'latin america'],
+}
+
+// 已移除的新闻源（存档）
+export const removedSources = [
+  {
+    id: 'xinhua',
+    name: '新华网',
+    url: 'http://www.xinhuanet.com/politics/news_politics.xml',
+    reason: '用户要求移除',
+    removedAt: '2026-02-08',
+  },
+  {
+    id: 'reuters-world',
+    name: 'Reuters World',
+    url: 'https://www.reuters.com/world/rss/',
+    reason: 'RSS不稳定',
+    removedAt: '2026-02-08',
+  },
+  {
+    id: 'caijing',
+    name: '财经网',
+    url: 'https://www.caijing.com.cn/rss/index.xml',
+    reason: 'RSS失效',
+    removedAt: '2026-02-08',
+  },
+  {
+    id: 'thepaper',
+    name: '澎湃新闻',
+    url: 'https://www.thepaper.cn/rss.xml',
+    reason: 'RSS格式不识别',
+    removedAt: '2026-02-08',
+  },
+  {
+    id: 'chaping',
+    name: '差评',
+    url: 'https://chaping.cn/feed',
+    reason: '502错误',
+    removedAt: '2026-02-08',
+  },
+  {
+    id: 'geekpark',
+    name: '极客公园',
+    url: 'https://www.geekpark.net/rss',
+    reason: '连接超时',
+    removedAt: '2026-02-08',
+  },
+  {
+    id: 'pingwest',
+    name: 'PingWest',
+    url: 'https://www.pingwest.com/feed',
+    reason: 'RSS格式不识别',
+    removedAt: '2026-02-08',
+  },
+]

@@ -1,0 +1,159 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model NewsSource {
+  id          String   @id @default(uuid())
+  name        String
+  url         String
+  type        String   // rss, api, scrape
+  category    String   // 默认分类
+  language    String   // 语言代码
+  isActive    Boolean  @default(true)
+  lastFetched DateTime?
+  fetchCount  Int      @default(0)
+  errorCount  Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  articles    Article[]
+  
+  @@map("news_sources")
+}
+
+model Article {
+  id              String   @id @default(uuid())
+  title           String
+  summary         String?
+  content         String?
+  originalUrl     String
+  imageUrl        String?
+  
+  // 分类
+  category        String   // 科技/财经/政治/体育/娱乐/健康/教育/环境/国际/国内
+  subCategory     String?
+  tags            String?  // JSON array
+  
+  // 来源
+  sourceId        String
+  source          NewsSource @relation(fields: [sourceId], references: [id])
+  sourceName      String
+  
+  // 语言与翻译
+  originalLanguage String   // 原文语言
+  translatedTitle  String?  // 翻译后的标题
+  translatedSummary String? // 翻译后的摘要
+  
+  // 时间
+  publishedAt     DateTime
+  fetchedAt       DateTime @default(now())
+  
+  // 统计
+  viewCount       Int      @default(0)
+  isFeatured      Boolean  @default(false)
+  isDailySelected Boolean  @default(false) // 是否被选入日报
+  
+  // 去重
+  hash            String   @unique // 内容哈希
+  
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  
+  dailyArticles   DailyArticle[]
+  
+  @@index([category])
+  @@index([publishedAt])
+  @@index([sourceId])
+  @@index([isFeatured])
+  @@map("articles")
+}
+
+model DailyNews {
+  id          String   @id @default(uuid())
+  date        DateTime @unique
+  title       String
+  summary     String?
+  
+  // 每个分类的精选数量
+  techCount     Int @default(0)
+  financeCount  Int @default(0)
+  politicsCount Int @default(0)
+  sportsCount   Int @default(0)
+  entertainmentCount Int @default(0)
+  healthCount   Int @default(0)
+  educationCount Int @default(0)
+  environmentCount Int @default(0)
+  internationalCount Int @default(0)
+  domesticCount Int @default(0)
+  
+  totalCount    Int @default(0)
+  
+  isPublished   Boolean  @default(false)
+  publishedAt   DateTime?
+  
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  
+  articles      DailyArticle[]
+  
+  @@map("daily_news")
+}
+
+model DailyArticle {
+  id          String   @id @default(uuid())
+  dailyId     String
+  daily       DailyNews @relation(fields: [dailyId], references: [id])
+  
+  articleId   String
+  article     Article  @relation(fields: [articleId], references: [id])
+  
+  category    String
+  order       Int      // 在日报中的排序
+  
+  createdAt   DateTime @default(now())
+  
+  @@unique([dailyId, articleId])
+  @@map("daily_articles")
+}
+
+model Subscriber {
+  id          String   @id @default(uuid())
+  email       String   @unique
+  name        String?
+  
+  // 订阅偏好
+  subscribedCategories String? // JSON array ["tech", "finance", ...]
+  preferredLanguage   String   @default("zh")
+  
+  // 订阅状态
+  isActive    Boolean  @default(true)
+  subscribedAt DateTime @default(now())
+  lastSentAt  DateTime?
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  @@map("subscribers")
+}
+
+model FetchLog {
+  id          String   @id @default(uuid())
+  sourceId    String?
+  sourceName  String?
+  status      String   // success, error, partial
+  message     String?
+  articlesFetched Int  @default(0)
+  startedAt   DateTime
+  completedAt DateTime?
+  
+  createdAt   DateTime @default(now())
+  
+  @@index([sourceId])
+  @@index([createdAt])
+  @@map("fetch_logs")
+}
