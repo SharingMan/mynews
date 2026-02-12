@@ -227,7 +227,7 @@ export const newsSources: NewsSourceConfig[] = [
   {
     id: 'zhihu-hot',
     name: '知乎热榜',
-    url: 'https://rsshub.app/zhihu/hot',
+    url: 'https://diygodrsshubchromium-bundled-production-997a.up.railway.app/zhihu/hot',
     type: 'rss',
     category: 'china',
     language: 'zh',
@@ -251,7 +251,7 @@ export const newsSources: NewsSourceConfig[] = [
   {
     id: 'infzm',
     name: '南方周末',
-    url: 'https://rsshub.app/infzm/2',
+    url: 'https://diygodrsshubchromium-bundled-production-997a.up.railway.app/infzm/2',
     type: 'rss',
     category: 'china',
     language: 'zh',
@@ -291,7 +291,7 @@ export const newsSources: NewsSourceConfig[] = [
   {
     id: 'ithome',
     name: 'IT之家',
-    url: 'https://rsshub.app/ithome/ranking/24h',
+    url: 'https://diygodrsshubchromium-bundled-production-997a.up.railway.app/ithome/ranking/24h',
     type: 'rss',
     category: 'tech',
     language: 'zh',
@@ -309,7 +309,7 @@ export const newsSources: NewsSourceConfig[] = [
   {
     id: 'jin10',
     name: '金十数据',
-    url: 'https://rsshub.app/jin10/xnews/53',
+    url: 'https://diygodrsshubchromium-bundled-production-997a.up.railway.app/jin10/xnews/53',
     type: 'rss',
     category: 'finance',
     language: 'zh',
@@ -317,7 +317,7 @@ export const newsSources: NewsSourceConfig[] = [
   {
     id: 'latepost',
     name: '晚点 LatePost',
-    url: 'https://rsshub.app/latepost',
+    url: 'https://diygodrsshubchromium-bundled-production-997a.up.railway.app/latepost',
     type: 'rss',
     category: 'tech',
     language: 'zh',
@@ -325,7 +325,7 @@ export const newsSources: NewsSourceConfig[] = [
   {
     id: 'bianews',
     name: 'Bianews',
-    url: 'https://rsshub.app/bianews',
+    url: 'https://diygodrsshubchromium-bundled-production-997a.up.railway.app/bianews',
     type: 'rss',
     category: 'tech',
     language: 'zh',
@@ -333,23 +333,16 @@ export const newsSources: NewsSourceConfig[] = [
   {
     id: 'nbd',
     name: '每日经济新闻',
-    url: 'https://rsshub.app/nbd',
+    url: 'https://diygodrsshubchromium-bundled-production-997a.up.railway.app/nbd',
     type: 'rss',
     category: 'finance',
     language: 'zh',
   },
-  {
-    id: 'sycaijing',
-    name: '深言财经',
-    url: 'http://www.sycaijing.com/feed', // 尝试标准RSS路径
-    type: 'rss',
-    category: 'finance',
-    language: 'zh',
-  },
+
   {
     id: 'weibo-hot',
     name: '微博热搜',
-    url: 'https://rsshub.app/weibo/search/hot',
+    url: 'https://diygodrsshubchromium-bundled-production-997a.up.railway.app/weibo/search/hot',
     type: 'rss',
     category: 'china',
     language: 'zh',
@@ -357,7 +350,7 @@ export const newsSources: NewsSourceConfig[] = [
   {
     id: 'bilibili-hot',
     name: '哔哩哔哩热榜',
-    url: 'https://rsshub.app/bilibili/hot-search',
+    url: 'https://diygodrsshubchromium-bundled-production-997a.up.railway.app/bilibili/hot-search',
     type: 'rss',
     category: 'china',
     language: 'zh',
@@ -365,7 +358,7 @@ export const newsSources: NewsSourceConfig[] = [
   {
     id: 'douyin-hot',
     name: '抖音热榜',
-    url: 'https://rsshub.app/douyin/hot-search',
+    url: 'https://diygodrsshubchromium-bundled-production-997a.up.railway.app/douyin/hot-search',
     type: 'rss',
     category: 'china',
     language: 'zh',
@@ -373,7 +366,7 @@ export const newsSources: NewsSourceConfig[] = [
   {
     id: 'toutiao-hot',
     name: '今日头条热榜',
-    url: 'https://rsshub.app/toutiao/trending',
+    url: 'https://diygodrsshubchromium-bundled-production-997a.up.railway.app/toutiao/trending',
     type: 'rss',
     category: 'china',
     language: 'zh',
