@@ -11,6 +11,7 @@ import {
   Home,
   Newspaper,
   Brain,
+  Twitter,
   type LucideIcon
 } from 'lucide-react'
 
@@ -36,6 +37,7 @@ export const categoryIcons: Record<string, LucideIcon> = {
   environment: Leaf,
   china: Home,
   overseas: Globe,
+  twitter: Twitter,
 }
 
 // 新闻源配置
@@ -245,7 +247,7 @@ export const newsSources: NewsSourceConfig[] = [
     name: 'Elon Musk (X)',
     url: 'https://diygodrsshubchromium-bundled-production-997a.up.railway.app/twitter/user/elonmusk',
     type: 'rss',
-    category: 'tech',
+    category: 'twitter',
     language: 'en',
   },
   {
@@ -253,7 +255,7 @@ export const newsSources: NewsSourceConfig[] = [
     name: 'Donald J. Trump (X)',
     url: 'https://diygodrsshubchromium-bundled-production-997a.up.railway.app/twitter/user/realDonaldTrump',
     type: 'rss',
-    category: 'politics',
+    category: 'twitter',
     language: 'en',
   },
   {
@@ -444,6 +446,7 @@ export const categoryLabels: Record<string, { zh: string; en: string; color: str
   environment: { zh: '环境', en: 'Environment', color: 'bg-emerald-500' },
   china: { zh: '中国', en: 'China', color: 'bg-red-600' },
   overseas: { zh: '海外', en: 'Overseas', color: 'bg-blue-600' },
+  twitter: { zh: '推特名人', en: 'Twitter Celebs', color: 'bg-sky-500' },
 }
 
 // 分类关键词（用于自动分类）
@@ -459,6 +462,7 @@ export const categoryKeywords: Record<string, string[]> = {
   environment: ['环境', '气候', '环保', '能源', '污染', 'climate', 'environment', 'energy', 'pollution', 'carbon', 'renewable', 'solar', 'wind', 'green', 'sustainability', 'global warming'],
   china: ['中国', '中华', '大陆', '内地', '国内', '北京', '上海', '深圳', '广州', '杭州', '南京', '天津', '重庆', '成都', '武汉', '西安', '人民币', '央行', 'china', 'chinese', 'beijing', 'shanghai', 'shenzhen', 'guangzhou', 'mainland', 'prc'],
   overseas: ['海外', '国外', '外国', '国际', '全球', '世界', '欧洲', '美国', '日本', '韩国', '东南亚', '中东', '非洲', '拉美', 'overseas', 'international', 'global', 'world', 'foreign', 'europe', 'america', 'usa', 'japan', 'korea', 'southeast asia', 'middle east', 'africa', 'latin america'],
+  twitter: ['twitter', 'tweet', 'x.com', 'elon musk', 'trump', 'realdonaldtrump'],
 }
 
 // 已移除的新闻源（存档）
