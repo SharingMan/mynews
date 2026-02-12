@@ -31,6 +31,7 @@ const categories = [
   { id: 'overseas', name: '国际', color: '#2563eb' },
   { id: 'sports', name: '体育', color: '#f59e0b' },
   { id: 'politics', name: '政治', color: '#ef4444' },
+  { id: 'law', name: '法律', color: '#334155' },
   { id: 'entertainment', name: '娱乐', color: '#ec4899' },
 ]
 
@@ -223,6 +224,7 @@ function NewsList() {
     china: '中国',
     sports: '体育',
     politics: '政治',
+    law: '法律',
     entertainment: '娱乐',
   }
 

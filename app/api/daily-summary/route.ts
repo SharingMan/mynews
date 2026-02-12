@@ -30,6 +30,7 @@ async function generateSummaryWithAI(articles: any[]): Promise<{ summary: string
         health: '健康',
         education: '教育',
         environment: '环境',
+        law: '法律',
     }
 
     // 准备新闻摘要
@@ -132,6 +133,7 @@ function generateBasicSummary(articles: any[]): { summary: string; highlights: s
         health: '健康',
         education: '教育',
         environment: '环境',
+        law: '法律',
     }
 
     const categoryCounts: Record<string, number> = {}

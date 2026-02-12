@@ -83,6 +83,7 @@ const categoryNames: Record<string, string> = {
   education: '教育文化',
   environment: '环境保护',
   china: '中国新闻',
+  law: '法律在线',
 }
 
 export default function DailyPage() {

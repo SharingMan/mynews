@@ -31,7 +31,7 @@ export const metadata: Metadata = {
     template: "%s | GlobalNews",
   },
   description: "实时聚合全球最新新闻，涵盖科技、财经、国际、体育、AI等多个领域。为您提供最快、最全的新闻资讯服务。",
-  keywords: ["新闻", "科技", "财经", "AI", "人工智能", "体育", "娱乐", "全球新闻", "实时新闻"],
+  keywords: ["新闻", "科技", "财经", "AI", "人工智能", "体育", "娱乐", "法律", "全球新闻", "实时新闻"],
   authors: [{ name: "GlobalNews" }],
   creator: "GlobalNews",
   publisher: "GlobalNews",

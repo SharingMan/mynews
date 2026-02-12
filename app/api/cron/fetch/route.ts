@@ -98,7 +98,7 @@ export async function GET(request: NextRequest) {
           // 对于特定强分类（如 Twitter 推文、深度长文），直接使用源定义的分类，不进行自动重新分类
           // 对于一般分类（如 tech, finance），允许根据内容细分为 ai, crypto 等
           let category = source.category
-          if (!['twitter', 'indepth'].includes(source.category)) {
+          if (!['twitter', 'indepth', 'law'].includes(source.category)) {
             category = autoCategory(article.title, article.content, source.category)
           }
 

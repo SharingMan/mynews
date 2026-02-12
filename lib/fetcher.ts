@@ -5,9 +5,10 @@ import { categoryKeywords } from './news-sources'
 import { translateText as _translateText } from './translate'
 
 const rssParser = new Parser({
-  timeout: 10000,
+  timeout: 15000,
   headers: {
-    'User-Agent': 'Mozilla/5.0 (compatible; GlobalNewsBot/1.0)',
+    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36',
+    'Accept': 'application/rss+xml, application/xml, text/xml;q=0.9, */*;q=0.8',
   },
 })
 

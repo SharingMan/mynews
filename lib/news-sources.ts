@@ -13,6 +13,7 @@ import {
   Brain,
   Twitter,
   BookOpen,
+  Scale,
   type LucideIcon
 } from 'lucide-react'
 
@@ -40,6 +41,7 @@ export const categoryIcons: Record<string, LucideIcon> = {
   overseas: Globe,
   twitter: Twitter,
   indepth: BookOpen,
+  law: Scale,
 }
 
 // 新闻源配置
@@ -432,7 +434,47 @@ export const newsSources: NewsSourceConfig[] = [
     type: 'rss',
     category: 'ai',
     language: 'en',
-    // Removed trailing comma here to be safe with JSON parsers if needed, though TS allows it.
+  },
+  // 法律
+  {
+    id: 'law-asia',
+    name: 'Law.asia',
+    url: 'https://law.asia/feed/',
+    type: 'rss',
+    category: 'law',
+    language: 'zh', // Contains Chinese content as requested
+  },
+  {
+    id: 'law-com',
+    name: 'Law.com',
+    url: 'https://feeds.feedblitz.com/law/legal-news&x=1',
+    type: 'rss',
+    category: 'law',
+    language: 'en',
+  },
+  {
+    id: 'above-the-law',
+    name: 'Above the Law',
+    url: 'https://abovethelaw.com/feed/',
+    type: 'rss',
+    category: 'law',
+    language: 'en',
+  },
+  {
+    id: 'global-legal-post',
+    name: 'Global Legal Post',
+    url: 'https://www.globallegalpost.com/rss/',
+    type: 'rss',
+    category: 'law',
+    language: 'en',
+  },
+  {
+    id: 'national-law-review',
+    name: 'National Law Review',
+    url: 'https://natlawreview.com/feed/',
+    type: 'rss',
+    category: 'law',
+    language: 'en',
   }
 ]
 
@@ -451,6 +493,7 @@ export const categoryLabels: Record<string, { zh: string; en: string; color: str
   overseas: { zh: '海外', en: 'Overseas', color: 'bg-blue-600' },
   twitter: { zh: '推特名人', en: 'Twitter Celebs', color: 'bg-sky-500' },
   indepth: { zh: '深度长文', en: 'In-depth', color: 'bg-indigo-600' },
+  law: { zh: '法律', en: 'Law', color: 'bg-slate-700' },
 }
 
 // 分类关键词（用于自动分类）
@@ -458,13 +501,14 @@ export const categoryKeywords: Record<string, string[]> = {
   tech: ['科技', '互联网', '软件', '硬件', '手机', '电脑', '芯片', '半导体', '5G', '区块链', 'crypto', 'apple', 'google', 'microsoft', 'tesla', 'startup', 'venture', 'technology', 'tech', 'software', 'cloud', 'cybersecurity'],
   ai: ['AI', '人工智能', '机器学习', '深度学习', '神经网络', '大模型', 'LLM', 'ChatGPT', 'GPT', 'Claude', 'Gemini', 'OpenAI', 'Anthropic', '生成式AI', 'AIGC', 'AI绘画', 'Midjourney', 'Stable Diffusion', '自动驾驶', '智能机器人', '自然语言处理', 'NLP', '计算机视觉', 'artificial intelligence', 'machine learning', 'deep learning', 'neural network', 'generative AI', 'large language model'],
   finance: ['财经', '金融', '股票', '股市', '经济', '银行', '投资', '理财', '货币', '比特币', 'market', 'stock', 'trade', 'economy', 'banking', 'investment', 'finance', 'financial', 'crypto', 'bitcoin', 'ethereum', 'nft'],
-  politics: ['政治', '政府', '选举', '政策', '法律', 'president', 'government', 'election', 'policy', 'law', 'congress', 'parliament', 'politics', 'political', 'vote', 'campaign', 'democrat', 'republican'],
+  politics: ['政治', '政府', '选举', '政策', 'president', 'government', 'election', 'policy', 'congress', 'parliament', 'politics', 'political', 'vote', 'campaign', 'democrat', 'republican'],
   sports: ['体育', '足球', '篮球', '比赛', '运动员', '奥运会', '世界杯', 'sports', 'football', 'soccer', 'basketball', 'olympics', 'nba', 'fifa', 'tennis', 'golf', 'baseball', 'nfl', 'premier league'],
   entertainment: ['娱乐', '电影', '音乐', '明星', '综艺', 'movie', 'film', 'music', 'celebrity', 'hollywood', 'netflix', 'entertainment', 'tv', 'television', 'actor', 'actress', 'director', 'album', 'concert'],
   health: ['健康', '医疗', '疾病', '疫苗', '医院', '医生', 'health', 'medical', 'disease', 'vaccine', 'covid', 'medicine', 'healthcare', 'doctor', 'hospital', 'mental health', 'nutrition', 'fitness'],
   education: ['教育', '学校', '大学', '学生', '考试', '留学', 'education', 'school', 'university', 'student', 'exam', 'college', 'academic', 'learning', 'teacher', 'professor'],
   environment: ['环境', '气候', '环保', '能源', '污染', 'climate', 'environment', 'energy', 'pollution', 'carbon', 'renewable', 'solar', 'wind', 'green', 'sustainability', 'global warming'],
   overseas: ['海外', '国外', '外国', '国际', '全球', '世界', '欧洲', '美国', '日本', '韩国', '东南亚', '中东', '非洲', '拉美', 'overseas', 'international', 'global', 'world', 'foreign', 'europe', 'america', 'usa', 'japan', 'korea', 'southeast asia', 'middle east', 'africa', 'latin america'],
+  law: ['法律', '法务', '律师', '法院', '判决', '诉讼', '法案', '法规', '合规', 'legal', 'law', 'lawyer', 'attorney', 'court', 'litigation', 'lawsuit', 'verdict', 'regulation', 'compliance', 'case', 'judicial', 'justice'],
 }
 
 // 已移除的新闻源（存档）

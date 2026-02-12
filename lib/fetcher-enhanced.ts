@@ -6,7 +6,8 @@ import { translateText as _translateText } from './translate'
 const rssParser = new Parser({
   timeout: 15000, // 增加超时时间
   headers: {
-    'User-Agent': 'Mozilla/5.0 (compatible; GlobalNewsBot/1.0)',
+    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36',
+    'Accept': 'application/rss+xml, application/xml, text/xml;q=0.9, */*;q=0.8',
   },
 })
 
@@ -159,7 +160,7 @@ export async function translateText(text: string, targetLang: string): Promise<s
 }
 
 // 批量抓取多个RSS源
-export async function batchFetchNews(sources: Array<{id: string, url: string, category: string}>): Promise<Map<string, RawArticle[]>> {
+export async function batchFetchNews(sources: Array<{ id: string, url: string, category: string }>): Promise<Map<string, RawArticle[]>> {
   const results = new Map<string, RawArticle[]>()
 
   // 并发抓取，但限制并发数量
