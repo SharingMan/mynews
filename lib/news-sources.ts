@@ -235,10 +235,26 @@ export const newsSources: NewsSourceConfig[] = [
   {
     id: 'ruanyifeng',
     name: '阮一峰的网络日志',
-    url: 'http://feeds.feedburner.com/ruanyifeng',
+    url: 'https://diygodrsshubchromium-bundled-production-997a.up.railway.app/ruanyifeng/blog',
     type: 'rss',
     category: 'tech',
     language: 'zh',
+  },
+  {
+    id: 'elon-musk',
+    name: 'Elon Musk (X)',
+    url: 'https://diygodrsshubchromium-bundled-production-997a.up.railway.app/twitter/user/elonmusk',
+    type: 'rss',
+    category: 'tech',
+    language: 'en',
+  },
+  {
+    id: 'donald-trump',
+    name: 'Donald J. Trump (X)',
+    url: 'https://diygodrsshubchromium-bundled-production-997a.up.railway.app/twitter/user/realDonaldTrump',
+    type: 'rss',
+    category: 'politics',
+    language: 'en',
   },
   {
     id: 'zaobao',
