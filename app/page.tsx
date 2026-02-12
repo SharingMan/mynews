@@ -264,8 +264,8 @@ function NewsList() {
                   <div className="flex-1 min-w-0">
                     <div className="leading-tight">
                       <Link
-                        href={category === 'live' ? article.originalUrl : `/article/${article.id}`}
-                        target={category === 'live' ? "_blank" : "_self"}
+                        href={['live', 'indepth', 'twitter'].includes(category) ? article.originalUrl : `/article/${article.id}`}
+                        target={['live', 'indepth', 'twitter'].includes(category) ? "_blank" : "_self"}
                         className="text-black hover:underline"
                         style={{ fontFamily: 'Verdana, Geneva, sans-serif', fontSize: '10pt', lineHeight: '1.4' }}
                       >
