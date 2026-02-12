@@ -21,7 +21,9 @@ interface Article {
 // 分类配置
 const categories = [
   { id: '', name: '全部', color: '#ff6600' },
-  { id: 'live', name: '实时热点', color: '#ff0000' }, // New Live News Category
+  { id: 'live', name: '实时热点', color: '#ff0000' },
+  { id: 'twitter', name: '推特名人', color: '#0ea5e9' },
+  { id: 'indepth', name: '深度长文', color: '#4f46e5' },
   { id: 'ai', name: 'AI', color: '#8b5cf6' },
   { id: 'tech', name: '科技', color: '#3b82f6' },
   { id: 'finance', name: '财经', color: '#10b981' },
@@ -212,6 +214,8 @@ function NewsList() {
 
   const categoryNames: Record<string, string> = {
     live: '实时热点',
+    twitter: '推特名人',
+    indepth: '深度长文',
     tech: '科技',
     ai: 'AI',
     finance: '财经',
