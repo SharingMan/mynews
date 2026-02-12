@@ -1,5 +1,5 @@
 [build]
-cmd = "npm install && npx prisma generate && npm run build"
+cmd = "npm install --include=dev && npx prisma generate && npm run build"
 
 [deploy]
 startCommand = "npx prisma db push --accept-data-loss && npm start"
