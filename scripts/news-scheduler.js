@@ -89,8 +89,17 @@ async function startScheduler() {
   }
 
   // 构建 Cron 表达式
-  // 注意：如果是 60 分钟，cron 表达式需要特殊处理，这里简单处理 */N
-  const cronExpression = `0 */${FETCH_INTERVAL} * * * *`;
+  // node-cron 使用 6 位格式: 秒 分 时 日 月 周
+  // 每 N 分钟执行: 0 */N * * * *
+  const interval = parseInt(FETCH_INTERVAL, 10);
+  let cronExpression;
+  if (interval === 60) {
+    cronExpression = '0 0 * * * *'; // 每小时
+  } else if (interval >= 1 && interval < 60) {
+    cronExpression = `0 */${interval} * * * *`;
+  } else {
+    cronExpression = '0 */30 * * * *'; // 默认30分钟
+  }
 
   const task = cron.schedule(cronExpression, async () => {
     await fetchNews();
