@@ -5,3 +5,6 @@ cmd = "npm install && npm run db:push && npm run build"
 startCommand = "npm start"
 restartPolicyType = "on_failure"
 restartPolicyMaxRetries = 3
+
+[deploy.env]
+FETCH_INTERVAL_MINUTES = "10"

@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start",
+    "start": "next start & node scripts/news-scheduler.js",
     "lint": "eslint",
     "fetch-news": "node scripts/news-scheduler.js",
     "scheduler": "node scripts/news-scheduler.js",
