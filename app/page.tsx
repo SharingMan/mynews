@@ -142,7 +142,7 @@ function NewsList() {
         url = `/api/articles?${apiParams}`
       }
 
-      const response = await fetch(url)
+      const response = await fetch(url, { cache: 'no-store' })
       if (response.ok) {
         const data = await response.json()
         const newArticles = data.articles || []

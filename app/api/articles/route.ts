@@ -3,7 +3,7 @@ import { prisma } from '@/lib/prisma'
 
 // 简单的内存缓存（生产环境建议使用 Redis）
 const cache = new Map<string, { data: any; timestamp: number }>()
-const CACHE_TTL = 60 * 1000 // 1分钟缓存
+const CACHE_TTL = 10 * 1000 // 10秒缓存
 
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url)
@@ -27,7 +27,7 @@ export async function GET(request: NextRequest) {
     return NextResponse.json(cached.data, {
       headers: {
         'X-Cache': 'HIT',
-        'Cache-Control': 'public, max-age=60',
+        'Cache-Control': 'public, max-age=10, s-maxage=10',
       },
     })
   }
@@ -143,7 +143,7 @@ export async function GET(request: NextRequest) {
     return NextResponse.json(responseData, {
       headers: {
         'X-Cache': 'MISS',
-        'Cache-Control': 'public, max-age=60',
+        'Cache-Control': 'public, max-age=10, s-maxage=10',
       },
     })
 
